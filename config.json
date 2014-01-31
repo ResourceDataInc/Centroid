@@ -1,0 +1,35 @@
+{
+  "Prod": {
+    "Database": {
+      "Server": "sqlprod01.centroid.local",
+      "Admin":{
+        "username": "sa",
+        "password": "centroid4config!"
+      }
+    }
+  },
+  "Test": {
+      "Database": {
+      "Server": "sqltest01.centroid.local",
+      "Admin":{
+        "username": "sa",
+        "password": "password9"
+      }
+    }
+  },
+  "Dev": {
+    "Database": {
+      "Server": "sqldev01.centroid.local",
+      "Admin":{
+        "username": "sa",
+        "password": "password0"
+      }
+    }
+  },
+  "All": {
+    "CI": {
+      "Server": "centroid-ci01.centroid.local",
+      "Repo": "https://github.com/ResourceDataInc/Centroid"
+    }
+  }
+}
