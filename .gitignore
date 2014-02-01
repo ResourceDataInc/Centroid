@@ -1,1 +1,12 @@
 *.pyc
+
+obj
+bin
+Bin
+*.suo
+*.cache
+*.csproj.user
+
+_ReSharper.*
+*.resharper
+*.resharper.user
