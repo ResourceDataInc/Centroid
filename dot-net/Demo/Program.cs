@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CentroidConfig;
+using Centroid;
 
-namespace CentroidConfig.Demo
+namespace Centroid.Demo
 {
     class Program
     {

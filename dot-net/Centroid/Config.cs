@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections;
 
-namespace CentroidConfig
+namespace Centroid
 {
     public class Config : DynamicObject
     {

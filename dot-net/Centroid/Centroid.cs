@@ -7,18 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CentroidConfig
+namespace Centroid
 {
     public class Centroid
     {
-        string fileName;
         dynamic rawConfig;
 
-        public Centroid(string fileName)
+        public Centroid(string json)
         {
-            this.fileName = fileName;
-            string json = System.IO.File.ReadAllText(this.fileName);
             rawConfig = JObject.Parse(json);
+        }
+
+        public static Centroid FromFile(string fileName)
+        {
+            string json = System.IO.File.ReadAllText(fileName);
+            return new Centroid(json);
         }
 
         public dynamic Environment(string env)

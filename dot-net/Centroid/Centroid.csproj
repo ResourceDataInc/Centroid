@@ -7,7 +7,7 @@
     <ProjectGuid>{BB414384-CD9B-42DC-93B7-8582887CE2F1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CentroidConfig</RootNamespace>
+    <RootNamespace>Centroid</RootNamespace>
     <AssemblyName>Centroid</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

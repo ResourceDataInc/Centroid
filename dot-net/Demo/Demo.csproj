@@ -7,7 +7,7 @@
     <ProjectGuid>{050AD362-C74D-4822-BC17-67F9CF57626D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CentroidConfig.Demo</RootNamespace>
+    <RootNamespace>Centroid.Demo</RootNamespace>
     <AssemblyName>Demo</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
