@@ -11,7 +11,7 @@ namespace CentroidConfig.Demo
     {
         static void Main(string[] args)
         {
-            var c = new Centroid();
+            var c = new Centroid("../../../../config.json");
             foreach (string env in new [] { "Dev", "Test", "Prod" })
             {
                 dynamic config = c.Environment(env);
