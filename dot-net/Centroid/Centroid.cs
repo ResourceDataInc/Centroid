@@ -12,20 +12,19 @@ namespace CentroidConfig
     public class Centroid
     {
         string fileName;
-        string allConfig_key;
+        dynamic rawConfig;
 
-        public Centroid(string fileName = "config.json", string AllConfig_key = "All")
+        public Centroid(string fileName)
         {
             this.fileName = fileName;
-            this.allConfig_key = AllConfig_key;
+            string json = System.IO.File.ReadAllText(this.fileName);
+            rawConfig = JObject.Parse(json);
         }
 
-        public dynamic environment(string env)
-        {
-            string json = System.IO.File.ReadAllText("../../../../" + this.fileName);
-            dynamic rawConfig = JObject.Parse(json);
+        public dynamic Environment(string env)
+        {            
             dynamic envConfig = rawConfig[env];
-            dynamic allConfig = rawConfig[this.allConfig_key];
+            dynamic allConfig = rawConfig["All"];
 
             foreach (var cfg in allConfig)
             {
@@ -33,7 +32,6 @@ namespace CentroidConfig
             }
 
             return new Config(envConfig, env);
-        }
-            
+        }            
     }
 }

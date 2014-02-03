@@ -14,7 +14,7 @@ namespace CentroidConfig.Demo
             var c = new Centroid();
             foreach (string env in new [] { "Dev", "Test", "Prod" })
             {
-                dynamic config = c.environment(env);
+                dynamic config = c.Environment(env);
 	            var admin_user = config.Database.admin.user_name;
 	            var admin_password = config.Database.admin.password;
 	            var db = config.Database.Server;
