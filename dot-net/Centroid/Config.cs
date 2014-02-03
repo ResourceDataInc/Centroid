@@ -12,25 +12,71 @@ namespace Centroid
 {
     public class Config : DynamicObject
     {
-        public dynamic config;
-        public string environment;
-        public string root;
+        private readonly dynamic _rawConfig;
+
+        public dynamic Json
+        {
+            get;
+            private set;
+        }
+
+        public string Environment
+        {
+            get;
+            private set;
+        }
+
+        public string Root
+        {
+            get;
+            private set;
+        }
+
+        public Config(string json)
+        {
+            _rawConfig = JObject.Parse(json);
+            Root = "root";
+        }
 
         public Config(dynamic config, string env, string root = "root")
         {
-            this.config = config;
-            this.environment = env;
-            this.root = root;
+            Json = config;
+            Environment = env;
+            Root = root;
         }
+
+        public static Config FromFile(string fileName)
+        {
+            string json = System.IO.File.ReadAllText(fileName);
+            return new Config(json);
+        }
+
+        public static Config FromString(string json)
+        {
+            return new Config(json);
+        }
+
+        public dynamic GetEnvironmentConfig(string environment)
+        {
+            var envConfig = _rawConfig[environment];
+            var allConfig = _rawConfig["All"];
+
+            foreach (var cfg in allConfig)
+            {
+                envConfig[cfg.Name] = cfg.Value;
+            }
+
+            return new Config(envConfig, environment);
+        }    
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             try
             {
-                result = this._getValue(binder.Name);
+                result = this.GetValue(binder.Name);
                 if (result != null)
                 {
-                    result = new Config(result, this.environment, binder.Name);
+                    result = new Config(result, this.Environment, binder.Name);
                     return true;
                 }
                 else
@@ -45,28 +91,33 @@ namespace Centroid
             }
         }
 
-        public override string ToString()
+        public override bool TryConvert(ConvertBinder binder, out object result)
         {
-            return config.ToString();
+            return base.TryConvert(binder, out result);
         }
 
-        private string _normaliseKey(string key)
+        public override string ToString()
+        {
+            return Json.ToString();
+        }
+
+        private string NormaliseKey(string key)
         {
             return key.Replace("_", String.Empty).ToLower();
         }
 
-        private dynamic _getValue(string key)
+        private dynamic GetValue(string key)
         {
-            key = _getActualKey(key);
-            return config[key];
+            key = GetActualKey(key);
+            return Json[key];
         }
 
-        private string _getActualKey(string key)
+        private string GetActualKey(string key)
         {
-            var properties = this.config.Properties() as IEnumerable<dynamic>;
+            var properties = this.Json.Properties() as IEnumerable<dynamic>;
             var keys = properties.Select(property => property.Name);
             return keys
-                .Single(m => _normaliseKey(m) == _normaliseKey(key));
+                .Single(m => NormaliseKey(m) == NormaliseKey(key));
         }
     }
 }
