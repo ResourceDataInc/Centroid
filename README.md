@@ -19,3 +19,11 @@ Now you can spend your time coding and not synchronizing configuration files.
 ## License
 
 Centroid is licensed under the [MIT License](LICENSE.txt)
+
+## Contributors
+
+boonrs
+gregoryjscott
+jtroe
+ralreegorganon
+thorncp
