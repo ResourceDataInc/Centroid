@@ -15,3 +15,7 @@ Duplication of configuration data in multiple projects of multiple types.
 A library that exposes one library of functionality to multiple projects, using the same single configuration file for all projects.
 
 Now you can spend your time coding and not synchronizing configuration files.
+
+## License
+
+Centroid is licensed under the [MIT License](LICENSE.txt)
