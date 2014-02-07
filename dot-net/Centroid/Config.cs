@@ -93,7 +93,24 @@ namespace Centroid
 
         public override bool TryConvert(ConvertBinder binder, out object result)
         {
-            return base.TryConvert(binder, out result);
+            if (binder.Type == typeof(string))
+            {
+                result = ToString();
+                return true;
+            }
+            else
+            {
+                try
+                {
+                    var T = Json.GetType();
+                    result = Convert.ChangeType(Json, binder.Type);
+                    return true;
+                }
+                catch (InvalidCastException)
+                {
+                    return base.TryConvert(binder, out result);
+                }    
+            }
         }
 
         public override string ToString()
