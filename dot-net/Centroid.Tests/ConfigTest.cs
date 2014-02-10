@@ -3,7 +3,7 @@
 namespace Centroid.Tests
 {
     [TestFixture]
-    public class CentroidTest
+    public class ConfigTest
     {
         private const string ConfigJson = @"
             {
