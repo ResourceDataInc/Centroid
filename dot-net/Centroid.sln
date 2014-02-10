@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Centroid", "Centroid\Centroid.csproj", "{BB414384-CD9B-42DC-93B7-8582887CE2F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Centroid.Tests", "Test\Centroid.Tests.csproj", "{1013212A-F25A-4318-9A50-E3E0E083FD33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Centroid.Tests", "Centroid.Tests\Centroid.Tests.csproj", "{1013212A-F25A-4318-9A50-E3E0E083FD33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
