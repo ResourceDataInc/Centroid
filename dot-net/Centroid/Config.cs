@@ -8,8 +8,6 @@ namespace Centroid
 {
     public class Config : DynamicObject
     {
-        private readonly dynamic _rawConfig;
-
         public dynamic Json { get; private set; }
 
         public string Environment { get; private set; }
@@ -18,7 +16,7 @@ namespace Centroid
 
         public Config(string json)
         {
-            _rawConfig = JObject.Parse(json);
+            Json = JObject.Parse(json);
             Root = "root";
         }
 
@@ -40,10 +38,10 @@ namespace Centroid
             return new Config(json);
         }
 
-        public dynamic GetEnvironmentConfig(string environment)
+        public dynamic WithEnvironment(string environment)
         {
-            var envConfig = _rawConfig[environment];
-            var allConfig = _rawConfig["All"];
+            var envConfig = Json[environment];
+            var allConfig = Json.All;
 
             foreach (var cfg in allConfig)
             {
@@ -85,18 +83,15 @@ namespace Centroid
                 result = ToString();
                 return true;
             }
-            else
+
+            try
             {
-                try
-                {
-                    var T = Json.GetType();
-                    result = Convert.ChangeType(Json, binder.Type);
-                    return true;
-                }
-                catch (InvalidCastException)
-                {
-                    return base.TryConvert(binder, out result);
-                }    
+                result = Convert.ChangeType(Json, binder.Type);
+                return true;
+            }
+            catch (InvalidCastException)
+            {
+                return base.TryConvert(binder, out result);
             }
         }
 
@@ -105,7 +100,7 @@ namespace Centroid
             return Json.ToString();
         }
 
-        private string NormaliseKey(string key)
+        private static string NormaliseKey(string key)
         {
             return key.Replace("_", String.Empty).ToLower();
         }
@@ -118,11 +113,9 @@ namespace Centroid
 
         private string GetActualKey(string key)
         {
-            var properties = this.Json.Properties() as IEnumerable<dynamic>;
+            var properties = (IEnumerable<dynamic>) Json.Properties();
             var keys = properties.Select(property => property.Name);
-            return keys
-                .Single(m => NormaliseKey(m) == NormaliseKey(key));
+            return keys.Single(m => NormaliseKey(m) == NormaliseKey(key));
         }
     }
 }
-
