@@ -1,4 +1,4 @@
-class centroid:
+class Config:
     def __init__(self, fileName = 'config.json', AllConfig_key = 'All'):
         self.fileName = fileName
         self.AllConfig_key = 'All'
