@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections;
 
 namespace Centroid
 {
@@ -14,23 +10,11 @@ namespace Centroid
     {
         private readonly dynamic _rawConfig;
 
-        public dynamic Json
-        {
-            get;
-            private set;
-        }
+        public dynamic Json { get; private set; }
 
-        public string Environment
-        {
-            get;
-            private set;
-        }
+        public string Environment { get; private set; }
 
-        public string Root
-        {
-            get;
-            private set;
-        }
+        public string Root { get; private set; }
 
         public Config(string json)
         {
@@ -73,22 +57,25 @@ namespace Centroid
         {
             try
             {
-                result = this.GetValue(binder.Name);
-                if (result != null)
+                var container = GetValue(binder.Name);
+
+                if (container is JContainer)
                 {
-                    result = new Config(result, this.Environment, binder.Name);
-                    return true;
+                    result = new Config(container, Environment, binder.Name);
                 }
                 else
                 {
-                    return false;
+                    result = container.Value;
                 }
+
+                return true;
             }
             catch
             {
                 result = null;
-                return false;
             }
+
+            return false;
         }
 
         public override bool TryConvert(ConvertBinder binder, out object result)

@@ -1,48 +1,49 @@
-﻿using System;
-using System.Collections;
-using System.Diagnostics;
-using NUnit.Framework;
-using System.Linq;
+﻿using NUnit.Framework;
 
 namespace Centroid.Tests
 {
     [TestFixture]
     public class UnitTest1
     {
-        private const string ConfigPath = "../../../../config.json";
-
-        [Test]
-        public void dev_environment_config_is_not_null()
-        {
-            var config = Centroid.Config.FromFile(ConfigPath).GetEnvironmentConfig("Dev");
-            Assert.NotNull(config);
-        }
-
-        [Test]
-        public void test_environment_config_is_not_null()
-        {
-            var config = Config.FromFile(ConfigPath).GetEnvironmentConfig("Test");
-            Assert.NotNull(config);
-        }
-
-        [Test]
-        public void dev_environment_config_has_database_server()
-        {
-            var config = Config.FromFile(ConfigPath).GetEnvironmentConfig("Dev");
-            var server = config.Database.Server as string;
-            Assert.NotNull(server);
-            Debug.Write(server);
-            Assert.Greater(server.Length, 0);
-        }
+        private const string ConfigJson = @"
+            {
+                ""Dev"": {
+                    ""Database"": {
+                        ""Server"": ""the-dev-database""
+                    }
+                },
+                ""Prod"": {
+                    ""Database"": {
+                        ""Server"": ""the-prod-database""
+                    }
+                },
+                ""All"": {
+                    ""SharedNest"": {
+                        ""SharedKey"": ""shared value""
+                    }
+                }
+            }
+        ";
 
         [Test]
         public void environment_property_shows_correct_environment()
         {
-            const string env = "Dev";
-            var config = Config.FromFile(ConfigPath).GetEnvironmentConfig(env);
-            var envOut = config.Environment;
-            var dictD = (object) config;
-            Assert.AreEqual(env, envOut);
+            var config = new Config(ConfigJson).GetEnvironmentConfig("Prod");
+            Assert.AreEqual("Prod", config.Environment);
+        }
+
+        [Test]
+        public void environment_specific_config_is_included_correctly()
+        {
+            var config = new Config(ConfigJson).GetEnvironmentConfig("Dev");
+            Assert.AreEqual("the-dev-database", config.Database.Server);
+        }
+
+        [Test]
+        public void shared_config_is_included_correctly()
+        {
+            var config = new Config(ConfigJson).GetEnvironmentConfig("Prod");
+            Assert.AreEqual("shared value", config.SharedNest.SharedKey);
         }
     }
 }
