@@ -5,6 +5,8 @@ namespace Centroid.Tests
     [TestFixture]
     public class ConfigTest
     {
+        private const string SharedFilePath = @"..\..\..\..\config.json";
+
         private const string JsonConfig = @"
             {
                 ""Dev"": {
@@ -51,6 +53,16 @@ namespace Centroid.Tests
         {
             dynamic config = new Config(@"{ ""snake_key"": ""some value"" }");
             Assert.AreEqual("some value", config.SnakeKey);
+        }
+
+        [Test]
+        public void can_load_config_from_file()
+        {
+            Assert.DoesNotThrow(() =>
+                {
+                    dynamic config = Config.FromFile(SharedFilePath);
+                    Assert.NotNull(config.All);
+                });
         }
     }
 }
