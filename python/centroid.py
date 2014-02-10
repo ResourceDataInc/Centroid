@@ -1,24 +1,65 @@
-class centroid:
-    def __init__(self, fileName = 'config.json', AllConfig_key = 'All'):
-        self.fileName = fileName
-        self.AllConfig_key = 'All'
+import json
+
+class Config:
+    def __init__(self, config, env = None):
+        if env is not None:
+            self.environment = env
+
+        if type(config) is dict:
+            self.config = config
+        else:
+            self.config = json.loads(config)
+
+    def __getattr__(self, attrib):
+        return self[attrib]
+
+    # config['key']
+    def __getitem__(self, key):
+        key = _get_actual_key(key, self.config)
+        if key is None:
+            raise Exception('Key not found in collection.')
+
+        value = _get_value(key, self.config)
+        if type(value) is dict:
+            return Config(value)
+        return value
+
+    # to string
+    def __str__(self):
+        return ''
 
     def environment(self, env):
-        import json
-        import _helper
+        env_json = self.config[env]
 
-        with open(self.fileName) as json_file:
+        actual_key = _get_actual_key('all', self.config)
+        if actual_key is not None:
+            all_json = _get_value(actual_key, self.config)
+            env_json.update(all_json);
+
+        return Config(env_json, env)
+
+    @staticmethod
+    def from_file(filename):
+        with open(filename) as json_file:
             str_json = json_file.read()
-            raw_json = json.loads(str_json)
+            return Config(str_json)
 
-            if not env in raw_json.keys():
-                raise Exception('Key not found in configuration.')
+    @staticmethod
+    def from_action(action):
+        str_json = action()
+        return Config(str_json)
 
-            env_json = raw_json[env]
+# case insensitive hashtable helpers
+def _get_normalised_key(unnormalisedKey):
+    return unnormalisedKey.replace('_','').lower()
 
-            if self.AllConfig_key in raw_json.keys():
-                all_json = raw_json[self.AllConfig_key]
-                env_json.update(all_json)
+def _get_value(key, hashtable):
+    return hashtable[_get_actual_key(key, hashtable)]
 
-            return _helper.config(env_json, env)
-
+def _get_actual_key(key, hashtable):
+    result = [ k for k in hashtable.keys() if _get_normalised_key(key) == _get_normalised_key(k) ]
+    if len(result) > 0:
+        if len(result) > 1:
+            raise Exception('Too many matching keys in collection.')
+        return result[0]
+    return None

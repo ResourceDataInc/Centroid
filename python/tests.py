@@ -1,16 +1,43 @@
 import unittest
-from centroid import centroid
+from centroid import Config
 
 class ConfigTest(unittest.TestCase):
 
-	def test_environment_property_shows_correct_environment(self):
-		config = centroid().environment("Prod")
+	def test_create_from_string(self):
+		config = Config('{"Prod": { "RealDeal": "whatever" }}')
+		self.assertEqual(config.Prod.RealDeal, "whatever")
+
+	def test_can_create_from_file(self):
+		config = Config.from_file('config.json')
+		self.assertEqual(config.dev.database.server, "sqldev01.centroid.local")
+
+	def test_create_from_custom_action(self):
+		config = Config.from_action(_custom_config)
+		self.assertEqual(config.Prod.RealDeal, "whatever")
+
+	def test_raises_if_key_not_found(self):
+		config = Config('{"Prod": { "RealDeal": "whatever" }}')
+		with self.assertRaises(Exception):
+			config = config.does_not_exist
+
+	def test_readable_using_snake_case_property(self):
+		config = Config('{"Prod": { "RealDeal": "whatever" }}')
+		self.assertEqual(config.prod.real_deal, "whatever")
+
+	def test_environment_specific_config_is_included(self):
+		config = Config('{"Prod": { "RealDeal": "whatever" }}')
+		config = config.environment('Prod')
+		self.assertEqual(config.real_deal, "whatever")
+
+	def test_shared_config_is_included(self):
+		config = Config.from_file('config.json')
+		config = config.environment("Dev")
+		self.assertEqual(config.ci.repo, "https://github.com/ResourceDataInc/Centroid")
+
+	def test_environment_property(self):
+		config = Config.from_file('config.json')
+		config = config.environment("Prod")
 		self.assertEqual(config.environment, "Prod")
 
-	def test_environment_specific_config_is_included_correctly(self):
-		config = centroid().environment("Dev")
-		self.assertEqual(config.database.server, "sqldev01.centroid.local")
-
-	def test_shared_config_is_included_correctly(self):
-		config = centroid().environment("Dev")
-		self.assertEqual(config.ci.repo, "https://github.com/ResourceDataInc/Centroid")
+def _custom_config():
+	return '{"Prod": { "RealDeal": "whatever" }}'
