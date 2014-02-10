@@ -8,23 +8,19 @@ namespace Centroid
 {
     public class Config : DynamicObject
     {
-        public dynamic Json { get; private set; }
+        public dynamic RawConfig { get; private set; }
 
         public string Environment { get; private set; }
 
-        public string Root { get; private set; }
-
         public Config(string json)
         {
-            Json = JObject.Parse(json);
-            Root = "root";
+            RawConfig = JObject.Parse(json);
         }
 
-        public Config(dynamic config, string env, string root = "root")
+        public Config(dynamic config, string env)
         {
-            Json = config;
+            RawConfig = config;
             Environment = env;
-            Root = root;
         }
 
         public static Config FromFile(string fileName)
@@ -33,15 +29,10 @@ namespace Centroid
             return new Config(json);
         }
 
-        public static Config FromString(string json)
-        {
-            return new Config(json);
-        }
-
         public dynamic WithEnvironment(string environment)
         {
-            var envConfig = Json[environment];
-            var allConfig = Json.All;
+            var envConfig = RawConfig[environment];
+            var allConfig = RawConfig.All;
 
             foreach (var cfg in allConfig)
             {
@@ -49,7 +40,7 @@ namespace Centroid
             }
 
             return new Config(envConfig, environment);
-        }    
+        }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
@@ -59,7 +50,7 @@ namespace Centroid
 
                 if (container is JContainer)
                 {
-                    result = new Config(container, Environment, binder.Name);
+                    result = new Config(container, Environment);
                 }
                 else
                 {
@@ -86,7 +77,7 @@ namespace Centroid
 
             try
             {
-                result = Convert.ChangeType(Json, binder.Type);
+                result = Convert.ChangeType(RawConfig, binder.Type);
                 return true;
             }
             catch (InvalidCastException)
@@ -97,7 +88,7 @@ namespace Centroid
 
         public override string ToString()
         {
-            return Json.ToString();
+            return RawConfig.ToString();
         }
 
         private static string NormaliseKey(string key)
@@ -108,12 +99,12 @@ namespace Centroid
         private dynamic GetValue(string key)
         {
             key = GetActualKey(key);
-            return Json[key];
+            return RawConfig[key];
         }
 
         private string GetActualKey(string key)
         {
-            var properties = (IEnumerable<dynamic>) Json.Properties();
+            var properties = (IEnumerable<dynamic>) RawConfig.Properties();
             var keys = properties.Select(property => property.Name);
             return keys.Single(m => NormaliseKey(m) == NormaliseKey(key));
         }
