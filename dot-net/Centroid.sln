@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Centroid", "Centroid\Centroid.csproj", "{BB414384-CD9B-42DC-93B7-8582887CE2F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Centroid.Tests", "Centroid.Tests\Centroid.Tests.csproj", "{1013212A-F25A-4318-9A50-E3E0E083FD33}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB414384-CD9B-42DC-93B7-8582887CE2F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB414384-CD9B-42DC-93B7-8582887CE2F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB414384-CD9B-42DC-93B7-8582887CE2F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB414384-CD9B-42DC-93B7-8582887CE2F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1013212A-F25A-4318-9A50-E3E0E083FD33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1013212A-F25A-4318-9A50-E3E0E083FD33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1013212A-F25A-4318-9A50-E3E0E083FD33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1013212A-F25A-4318-9A50-E3E0E083FD33}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
