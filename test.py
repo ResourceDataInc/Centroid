@@ -1,10 +1,16 @@
+import unittest
 from centroid import centroid
 
-for env in ['Dev', 'Test', 'Prod']:
-	config = centroid().environment(env)
-	
-	admin_user = config.Database.admin.user_name
-	admin_password = config.Database.admin.password
-	db = config.Database.Server
+class ConfigTest(unittest.TestCase):
 
-	print '%s => Server=%s;Username=%s;Password=%s' % (env, db, admin_user, admin_password)
+	def test_environment_property_shows_correct_environment(self):
+		config = centroid().environment("Prod")
+		self.assertEqual(config.environment, "Prod")
+
+	def test_environment_specific_config_is_included_correctly(self):
+		config = centroid().environment("Dev")
+		self.assertEqual(config.database.server, "sqldev01.centroid.local")
+
+	def test_shared_config_is_included_correctly(self):
+		config = centroid().environment("Dev")
+		self.assertEqual(config.ci.repo, "https://github.com/ResourceDataInc/Centroid")
