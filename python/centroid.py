@@ -26,7 +26,7 @@ class Config:
 
     # to string
     def __str__(self):
-        return ''
+        return str(json.dumps(self.config))
 
     def environment(self, env):
         env_json = self.config[env]
