@@ -10,23 +10,14 @@ namespace Centroid
     {
         public dynamic RawConfig { get; private set; }
 
-        public string Environment { get; private set; }
-
         public Config(string json)
         {
             RawConfig = JObject.Parse(json);
         }
 
-        public Config(dynamic config, string env)
+        protected Config(dynamic config)
         {
             RawConfig = config;
-            Environment = env;
-        }
-
-        public static Config FromFile(string fileName)
-        {
-            string json = System.IO.File.ReadAllText(fileName);
-            return new Config(json);
         }
 
         public dynamic WithEnvironment(string environment)
@@ -39,7 +30,7 @@ namespace Centroid
                 envConfig[cfg.Name] = cfg.Value;
             }
 
-            return new Config(envConfig, environment);
+            return new Config(envConfig);
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
@@ -50,7 +41,7 @@ namespace Centroid
 
                 if (container is JContainer)
                 {
-                    result = new Config(container, Environment);
+                    result = new Config(container);
                 }
                 else
                 {
