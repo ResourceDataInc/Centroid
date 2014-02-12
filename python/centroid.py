@@ -32,11 +32,13 @@ class Config:
         env_json = self.config[env]
 
         actual_key = _get_actual_key('all', self.config)
-        if actual_key is not None:
-            all_json = _get_value(actual_key, self.config)
-            env_json.update(all_json);
+        if actual_key is None:
+            return Config(env_json, env)
 
-        return Config(env_json, env)
+        all_json = _get_value(actual_key, self.config)
+        all_json.update(env_json);
+
+        return Config(all_json, env)
 
     @staticmethod
     def from_file(filename):
