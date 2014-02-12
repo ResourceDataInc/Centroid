@@ -1,11 +1,12 @@
 ﻿using NUnit.Framework;
+using System.IO;
 
 namespace Centroid.Tests
 {
     [TestFixture]
     public class ConfigTest
     {
-        private const string SharedFilePath = @"..\..\..\..\config.json";
+        private readonly string sharedFilePath;
 
         private const string JsonConfig = @"
             {
@@ -26,6 +27,11 @@ namespace Centroid.Tests
                 }
             }
         ";
+
+        public ConfigTest()
+        {
+            sharedFilePath = Path.Combine("..", "..", "..", "..", "config.json");
+        }
 
         [Test]
         public void environment_property_shows_correct_environment()
@@ -60,7 +66,7 @@ namespace Centroid.Tests
         {
             Assert.DoesNotThrow(() =>
                 {
-                    dynamic config = Config.FromFile(SharedFilePath);
+                    dynamic config = Config.FromFile(sharedFilePath);
                     Assert.NotNull(config.All);
                 });
         }
