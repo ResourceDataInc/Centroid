@@ -1,55 +1,47 @@
 import json
 
 class Config:
-    def __init__(self, config, env = None):
-        if env is not None:
-            self.environment = env
-
+    def __init__(self, config):
         if type(config) is dict:
-            self.config = config
+            self.raw_config = config
         else:
-            self.config = json.loads(config)
+            self.raw_config = json.loads(config)
 
     def __getattr__(self, attrib):
         return self[attrib]
 
     # config['key']
     def __getitem__(self, key):
-        key = _get_actual_key(key, self.config)
+        key = _get_actual_key(key, self.raw_config)
         if key is None:
             raise Exception('Key not found in collection.')
 
-        value = _get_value(key, self.config)
+        value = _get_value(key, self.raw_config)
         if type(value) is dict:
             return Config(value)
         return value
 
     # to string
     def __str__(self):
-        return str(json.dumps(self.config))
+        return str(json.dumps(self.raw_config))
 
-    def environment(self, env):
-        env_json = self.config[env]
+    def for_environment(self, env):
+        env_json = self.raw_config[env]
 
-        actual_key = _get_actual_key('all', self.config)
+        actual_key = _get_actual_key('all', self.raw_config)
         if actual_key is None:
-            return Config(env_json, env)
+            return Config(env_json)
 
-        all_json = _get_value(actual_key, self.config)
+        all_json = _get_value(actual_key, self.raw_config)
         all_json.update(env_json);
 
-        return Config(all_json, env)
+        return Config(all_json)
 
     @staticmethod
     def from_file(filename):
         with open(filename) as json_file:
             str_json = json_file.read()
             return Config(str_json)
-
-    @staticmethod
-    def from_action(action):
-        str_json = action()
-        return Config(str_json)
 
 # case insensitive hashtable helpers
 def _get_normalised_key(unnormalisedKey):
