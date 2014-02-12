@@ -1,16 +1,16 @@
-﻿using NUnit.Framework;
+﻿using System;
 using System.IO;
-using System;
 using System.Text.RegularExpressions;
+using NUnit.Framework;
 
 namespace Centroid.Tests
 {
     [TestFixture]
     public class ConfigTest
     {
-        private const string JsonConfig = @"{""Environment"": {""TheKey"": ""TheValue""}}";
+        const string JsonConfig = @"{""Environment"": {""TheKey"": ""TheValue""}}";
 
-        private readonly string sharedFilePath;
+        readonly string sharedFilePath;
 
         public ConfigTest()
         {
@@ -85,7 +85,7 @@ namespace Centroid.Tests
         public void test_modifying_raw_config()
         {
             dynamic config = new Config(JsonConfig);
-            config.RawConfig["Environment"]["TheKey"] = "NotTheValue"; 
+            config.RawConfig["Environment"]["TheKey"] = "NotTheValue";
             Assert.That(config.Environment.TheKey, Is.EqualTo("NotTheValue"));
         }
 
