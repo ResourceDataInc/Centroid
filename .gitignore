@@ -12,3 +12,5 @@ _ReSharper.*
 *.user
 TestResult.xml
 *.swp
+
+Gemfile.lock
