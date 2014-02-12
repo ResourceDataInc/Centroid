@@ -6,6 +6,7 @@ Bin
 *.suo
 *.cache
 *.csproj.user
+dot-net/build/pkg
 
 _ReSharper.*
 *.resharper
