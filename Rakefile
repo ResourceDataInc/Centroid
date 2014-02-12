@@ -6,6 +6,24 @@ build :build do |cmd|
   cmd.sln = "dot-net/Centroid.sln"
 end
 
+namespace :package do
+  directory "dot-net/build/pkg"
+  desc "Package .NET"
+  nugets_pack :cs => ["dot-net/build/pkg", :test] do |cmd|
+    cmd.exe = "dot-net/build/support/NuGet.exe"
+    cmd.out = "dot-net/build/pkg"
+    cmd.files = ["dot-net/Centroid/Centroid.csproj"]
+    cmd.with_metadata do |m|
+      m.description = "Centralized configuration management."
+      m.authors = "Resource Data, Inc."
+      m.version = "1.0.0"
+      m.license_url = "https://github.com/ResourceDataInc/Centroid/blob/master/LICENSE.txt"
+      m.project_url = "https://github.com/ResourceDataInc/Centroid"
+    end
+    cmd.gen_symbols
+  end
+end
+
 namespace :test do
   desc "Test .NET"
   test_runner :cs => [:build] do |cmd|
