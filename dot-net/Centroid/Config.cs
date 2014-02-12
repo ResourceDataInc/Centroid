@@ -74,7 +74,7 @@ namespace Centroid
 
         public override bool TryConvert(ConvertBinder binder, out object result)
         {
-            if (binder.Type == typeof(string))
+            if (binder.Type == typeof (string))
             {
                 result = ToString();
                 return true;
@@ -96,18 +96,18 @@ namespace Centroid
             return RawConfig.ToString(Formatting.None);
         }
 
-        private static string NormaliseKey(string key)
+        static string NormaliseKey(string key)
         {
             return key.Replace("_", String.Empty).ToLower();
         }
 
-        private dynamic GetValue(string key)
+        dynamic GetValue(string key)
         {
             key = GetActualKey(key);
             return RawConfig[key];
         }
 
-        private string GetActualKey(string key)
+        string GetActualKey(string key)
         {
             var properties = (IEnumerable<dynamic>) RawConfig.Properties();
             var keys = properties.Select(property => property.Name);
