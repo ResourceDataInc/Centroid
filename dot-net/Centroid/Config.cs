@@ -45,10 +45,8 @@ namespace Centroid
                 return new Config(envConfig);
             }
 
-            foreach (var cfg in envConfig)
-            {
-                allConfig[cfg.Name] = cfg.Value;
-            }
+            MergeInto(allConfig, envConfig);
+
             return new Config(allConfig);
         }
 
@@ -147,6 +145,34 @@ namespace Centroid
 
             var keys = duplicates.SelectMany(d => d.Select(x => x.Key));
             throw new InvalidOperationException("Centroid.Config instance contains duplicate keys: " + string.Join(", ", keys));
+        }
+
+        static void MergeInto(JContainer left, JToken right)
+        {
+            foreach (var rightChild in right.Children<JProperty>())
+            {
+                var rightChildProperty = rightChild;
+                var leftProperty = left.SelectToken(rightChildProperty.Name);
+
+                if (leftProperty == null)
+                {
+                    left.Add(rightChild);
+                }
+                else
+                {
+                    var leftObject = leftProperty as JObject;
+
+                    if (leftObject == null)
+                    {
+                        var leftParent = (JProperty) leftProperty.Parent;
+                        leftParent.Value = rightChildProperty.Value;
+                    }
+                    else
+                    {
+                        MergeInto(leftObject, rightChildProperty.Value);
+                    }
+                }
+            }
         }
     }
 }
