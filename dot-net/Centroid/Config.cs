@@ -2,25 +2,21 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Centroid
 {
     public class Config : DynamicObject
     {
-        public dynamic RawConfig { get; private set; }
-
-        public string Environment { get; private set; }
-
         public Config(string json)
         {
             RawConfig = JObject.Parse(json);
         }
 
-        public Config(dynamic config, string env)
+        public Config(dynamic config)
         {
             RawConfig = config;
-            Environment = env;
         }
 
         public static Config FromFile(string fileName)
@@ -29,17 +25,26 @@ namespace Centroid
             return new Config(json);
         }
 
-        public dynamic WithEnvironment(string environment)
+        public dynamic RawConfig { get; set; }
+
+        public dynamic ForEnvironment(string environment)
         {
             var envConfig = RawConfig[environment];
             var allConfig = RawConfig.All;
 
-            foreach (var cfg in envConfig)
+            if (allConfig == null)
             {
-                allConfig[cfg.Name] = cfg.Value;
+                allConfig = envConfig;
+            }
+            else
+            {
+                foreach (var cfg in envConfig)
+                {
+                    allConfig[cfg.Name] = cfg.Value;
+                }
             }
 
-            return new Config(allConfig, environment);
+            return new Config(allConfig);
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
@@ -50,7 +55,7 @@ namespace Centroid
 
                 if (container is JContainer)
                 {
-                    result = new Config(container, Environment);
+                    result = new Config(container);
                 }
                 else
                 {
@@ -88,7 +93,7 @@ namespace Centroid
 
         public override string ToString()
         {
-            return RawConfig.ToString();
+            return RawConfig.ToString(Formatting.None);
         }
 
         private static string NormaliseKey(string key)
