@@ -34,12 +34,12 @@ namespace Centroid
             var envConfig = RawConfig[environment];
             var allConfig = RawConfig.All;
 
-            foreach (var cfg in allConfig)
+            foreach (var cfg in envConfig)
             {
-                envConfig[cfg.Name] = cfg.Value;
+                allConfig[cfg.Name] = cfg.Value;
             }
 
-            return new Config(envConfig, environment);
+            return new Config(allConfig, environment);
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)

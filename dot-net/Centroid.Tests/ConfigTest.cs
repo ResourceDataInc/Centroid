@@ -18,6 +18,9 @@ namespace Centroid.Tests
                 ""Prod"": {
                     ""Database"": {
                         ""Server"": ""the-prod-database""
+                    },
+                    ""SharedNest"": {
+                        ""SharedKey"": ""prod value""
                     }
                 },
                 ""All"": {
@@ -50,7 +53,7 @@ namespace Centroid.Tests
         [Test]
         public void shared_config_is_included_correctly()
         {
-            var config = new Config(JsonConfig).WithEnvironment("Prod");
+            var config = new Config(JsonConfig).WithEnvironment("Dev");
             Assert.AreEqual("shared value", config.SharedNest.SharedKey);
         }
 
@@ -69,6 +72,13 @@ namespace Centroid.Tests
                     dynamic config = Config.FromFile(sharedFilePath);
                     Assert.NotNull(config.All);
                 });
+        }
+
+        [Test]
+        public void environment_specific_config_overrides_all()
+        {
+            dynamic config = new Config(JsonConfig).WithEnvironment("Prod");
+            Assert.AreEqual("prod value", config.SharedNest.SharedKey);
         }
     }
 }

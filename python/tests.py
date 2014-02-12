@@ -45,5 +45,10 @@ class ConfigTest(unittest.TestCase):
         config = Config(json)
         self.assertEqual(str(config), json)
 
+    def test_environment_specific_config_overrides_all(self):
+        json = '{"Prod": {"Shared": "production!"}, "All": {"Shared": "none"}}'
+        config = Config(json).environment("Prod")
+        self.assertEqual(config.shared, "production!")
+
 def _mock_config():
     return '{"Prod": {"RealDeal": "whatever"}}'
