@@ -10,6 +10,8 @@ namespace Centroid.Tests
     {
         const string JsonConfig = @"{""Environment"": {""TheKey"": ""TheValue""}}";
 
+        const string JsonConfigWithArray = @"{""Array"": [{""Key"": ""Value1""}, {""Key"": ""Value2""}]}";
+
         readonly string sharedFilePath;
 
         public ConfigTest()
@@ -95,6 +97,26 @@ namespace Centroid.Tests
             var config = new Config(@"{""Prod"": {""Shared"": ""production!""}, ""All"": {""Shared"": ""none""}}");
             dynamic environmentConfig = config.ForEnvironment("Prod");
             Assert.That(environmentConfig.Shared, Is.EqualTo("production!"));
+        }
+
+        [Test]
+        public void test_indexing_json_array()
+        {
+            dynamic config = new Config(JsonConfigWithArray);
+            Assert.That(config.Array[0].Key, Is.EqualTo("Value1"));
+            Assert.That(config.Array[1].Key, Is.EqualTo("Value2"));
+        }
+
+        [Test]
+        public void test_enumerating_json_array()
+        {
+            dynamic config = new Config(JsonConfigWithArray);
+            var itemCount = 0;
+            foreach (var item in config.Array)
+            {
+                itemCount++;
+            }
+            Assert.That(itemCount, Is.EqualTo(2));
         }
     }
 }
