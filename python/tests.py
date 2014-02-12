@@ -4,51 +4,59 @@ from centroid import Config
 
 class ConfigTest(unittest.TestCase):
 
-    def test_create_from_string(self):
-        config = Config(_mock_config())
-        self.assertEqual(config.Prod.RealDeal, "whatever")
+    @property
+    def _json_config(self):
+        return '{"Environment": {"TheKey": "TheValue"}}'
 
-    def test_can_create_from_file(self):
-        config = Config.from_file('config.json')
+    @property
+    def _shared_file_path(self):
+        return 'config.json'
+
+    def test_create_from_string(self):
+        config = Config(self._json_config)
+        self.assertEqual(config.Environment.TheKey, "TheValue")
+
+    def test_create_from_file(self):
+        config = Config.from_file(self._shared_file_path)
         self.assertEqual(config.dev.database.server, "sqldev01.centroid.local")
 
-    def test_create_from_custom_action(self):
-        config = Config.from_action(_mock_config)
-        self.assertEqual(config.Prod.RealDeal, "whatever")
-
     def test_raises_if_key_not_found(self):
-        config = Config(_mock_config())
+        config = Config(self._json_config)
         with self.assertRaises(Exception):
             config = config.does_not_exist
 
     def test_readable_using_snake_case_property(self):
-        config = Config(_mock_config())
-        self.assertEqual(config.prod.real_deal, "whatever")
+        config = Config(self._json_config)
+        self.assertEqual(config.environment.the_key, "TheValue")
 
     def test_environment_specific_config_is_included(self):
-        config = Config(_mock_config())
-        config = config.environment('Prod')
-        self.assertEqual(config.real_deal, "whatever")
+        config = Config(self._json_config)
+        environment_config = config.for_environment("Environment")
+        self.assertEqual(environment_config.the_key, "TheValue")
 
     def test_shared_config_is_included(self):
-        config = Config.from_file('config.json')
-        config = config.environment("Dev")
+        config = Config.from_file(self._shared_file_path)
+        config = config.for_environment("Dev")
         self.assertEqual(config.ci.repo, "https://github.com/ResourceDataInc/Centroid")
 
-    def test_environment_property(self):
-        config = Config.from_file('config.json')
-        config = config.environment("Prod")
-        self.assertEqual(config.environment, "Prod")
-
-    def test_to_string(self):
-        json = _mock_config();
+    def test_to_string_returns_json(self):
+        json = self._json_config;
         config = Config(json)
         self.assertEqual(str(config), json)
 
-    def test_environment_specific_config_overrides_all(self):
-        json = '{"Prod": {"Shared": "production!"}, "All": {"Shared": "none"}}'
-        config = Config(json).environment("Prod")
-        self.assertEqual(config.shared, "production!")
+    def test_iterating_raw_config(self):
+        config = Config.from_file(self._shared_file_path)
+        keyCount = 0;
+        for key in config.raw_config:
+            keyCount += 1
+        self.assertEqual(keyCount, 4)
 
-def _mock_config():
-    return '{"Prod": {"RealDeal": "whatever"}}'
+    def test_modifying_raw_config(self):
+        config = Config(self._json_config)
+        config.raw_config["Environment"]["TheKey"] = "NotTheValue"
+        self.assertEqual(config.environment.the_key, "NotTheValue")
+
+    def test_environment_specific_config_overrides_all(self):
+        config = Config('{"Prod": {"Shared": "production!"}, "All": {"Shared": "none"}}')
+        config = config.for_environment("Prod")
+        self.assertEqual(config.shared, "production!")
