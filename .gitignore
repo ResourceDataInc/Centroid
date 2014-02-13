@@ -1,4 +1,7 @@
 *.pyc
+python/build/
+python/dist/
+python/MANIFEST
 
 obj
 bin
