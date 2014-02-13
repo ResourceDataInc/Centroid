@@ -76,3 +76,10 @@ class ConfigTest(unittest.TestCase):
         for item in config.array:
             itemCount += 1
         self.assertEqual(itemCount, 2)
+
+    def test_enumerating_json_object(self):
+        config = Config(self._json_config)
+        itemCount = 0;
+        for item in config:
+            itemCount += 1
+        self.assertEqual(itemCount, 1)

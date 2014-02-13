@@ -118,5 +118,17 @@ namespace Centroid.Tests
             }
             Assert.That(itemCount, Is.EqualTo(2));
         }
+
+        [Test]
+        public void test_enumerating_json_object()
+        {
+            dynamic config = new Config(JsonConfig);
+            var itemCount = 0;
+            foreach (var item in config)
+            {
+                itemCount++;
+            }
+            Assert.That(itemCount, Is.EqualTo(1));
+        }
     }
 }

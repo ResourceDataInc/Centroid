@@ -17,6 +17,9 @@ class Config:
             return Config(value)
         return value
 
+    def __iter__(self):
+        return self.raw_config.__iter__()
+
     # to string
     def __str__(self):
         return str(json.dumps(self.raw_config))
