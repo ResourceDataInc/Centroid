@@ -2,70 +2,81 @@
 
 ## Installation
 
-**TODO**
+The Centroid .NET package is hosted at [Nuget](http://www.nuget.org/packages/Centroid/).
+
+You can install Centroid using Package Manager Console with `Install-Package Centroid`.
 
 ## Usage
 
-**TODO** more words
+You start by declaring your application's configuration values in JSON. This example is storing the database's server address.
 
-### Simple
+```json
+{
+    "database": {
+        "serverAddress": "my-server.local"
+    }
+}
+```
+
+.NET applications can consume this JSON configuration using Centroid's .NET API.
+
+### .NET API
+
+The .NET API is available through the `Centroid.Config` class. The `Config` class exposes the static `FromFile` method, a constructor, and the instance method `ForEnvironment`.
+
+### FromFile(filename)
+
+The configuration will be consumed by the .NET application using an instance of the `Config` class. You can create an instance of `Config` from a JSON file using the static `Config.FromFile(filename)` method.
+
+In the example below, note the `serverAddress` configuration value is retrieved using the PascalCase `ServerAddress` property even though the value is specified as camelCase in the JSON.
 
 ```cs
+// FromFile.cs
+dynamic config = Config.FromFile("config.json");
+var server = config.Database.ServerAddress; // => "my-server.local"
+```
+
+### Config(json)
+
+Alternatively you can create an instance of `Config` by passing a JSON string to the `Config` constructor.
+
+```cs
+// FromString.cs
 var json = @"{ ""Database"": { ""Server"": ""my-server.local"" } }";
 dynamic config = new Config(json);
-var server = config.Database.Server; // => "my-server.local"
+var server = config.Database.ServerAddress; // => "my-server.local"
 ```
 
-### Case agnostic
+### ForEnviroment(environment)
 
-```cs
-var json = @"{ ""third_party"": { ""rest_endpoint"": ""http://localhost:4567"" } }";
-dynamic config = new Config(json);
-var server = config.ThirdParty.RestEndpoint; // => "http://localhost:4567"
-```
+Typically real world applications have different configuration values depending on the environment. For example, you might have *dev* and *prod* environments that use different servers, user accounts, etc. However, applications usually have other configuration that is the same across all environments. Centroid makes it easy to retrieve all the configuration you need for a specific environment.
 
-### From file
+In environment based configuration, the top level objects in the JSON represent the various environments. You place the configuration that is the same across all environments in the *all* environment. 
 
-*config.json*
 ```json
 {
-    "Database": {
-        "Server": "my-server.local"
-    }
-}
-```
-
-*MyFile.cs*
-```cs
-var config = Config.FromFile("config.json");
-var server = config.Database.Server; // => "my-server.local"
-```
-
-### Environments
-
-*config.json*
-```json
-{
-    "Dev": {
-        "Database": {
-            "Server": "sql-dev.local"
+    "dev": {
+        "someResource": {
+            "server": "resource-dev.local"
         }
     },
-    "Prod": {
-        "Database": {
-            "Server": "sql-prod.local"
+    "prod": {
+        "someResource": {
+            "server": "resource-prod.local"
         }
     },
-    "All": {
-        "Solutions": {
-            "Main": "path/to/Main.sln"
+    "all": {
+        "keys": {
+            "ssh": "path/to/id_rsa.pub"
         }
     }
 }
 ```
 
-*MyFile.cs*
+The instance method `ForEnvironment` is then used to retrieve the environment based configuration. Centroid merges the requested environment's configuration with the *all* environment configuration. In the following example, the configuration for `prod` is merged with the configuration from `all` and the result is then available from a new instance of `Config`.
+
 ```cs
+// ForEnvironment.cs
 var config = Config.FromFile("config.json").ForEnvironment("Prod");
 var server = config.Database.Server; // => "sql-prod.local"
 var solutionPath = config.Solutions.Main; // => "path/to/Main.sln";
