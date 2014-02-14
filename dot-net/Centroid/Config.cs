@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -7,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Centroid
 {
-    public class Config : DynamicObject
+    public class Config : DynamicObject, IEnumerable
     {
         public Config(string json)
         {
@@ -27,6 +28,12 @@ namespace Centroid
 
         public dynamic RawConfig { get; set; }
 
+        public object this[int index]
+        {
+            get { return GetValue(index); }
+            set { RawConfig[index] = value; }
+        }
+
         public dynamic ForEnvironment(string environment)
         {
             var envConfig = RawConfig[environment];
@@ -34,16 +41,13 @@ namespace Centroid
 
             if (allConfig == null)
             {
-                allConfig = envConfig;
-            }
-            else
-            {
-                foreach (var cfg in envConfig)
-                {
-                    allConfig[cfg.Name] = cfg.Value;
-                }
+                return new Config(envConfig);
             }
 
+            foreach (var cfg in envConfig)
+            {
+                allConfig[cfg.Name] = cfg.Value;
+            }
             return new Config(allConfig);
         }
 
@@ -51,25 +55,14 @@ namespace Centroid
         {
             try
             {
-                var container = GetValue(binder.Name);
-
-                if (container is JContainer)
-                {
-                    result = new Config(container);
-                }
-                else
-                {
-                    result = container.Value;
-                }
-
+                result = GetValue(binder.Name);
                 return true;
             }
             catch
             {
                 result = null;
+                return false;
             }
-
-            return false;
         }
 
         public override bool TryConvert(ConvertBinder binder, out object result)
@@ -96,15 +89,36 @@ namespace Centroid
             return RawConfig.ToString(Formatting.None);
         }
 
+        public IEnumerator GetEnumerator()
+        {
+            return RawConfig.GetEnumerator();
+        }
+
         static string NormaliseKey(string key)
         {
             return key.Replace("_", String.Empty).ToLower();
         }
 
+        static dynamic GetValueFromContainer(dynamic container)
+        {
+            if (container is JContainer)
+            {
+                return new Config(container);
+            }
+            return container.Value;
+        }
+
+        dynamic GetValue(int index)
+        {
+            var container = RawConfig[index];
+            return GetValueFromContainer(container);
+        }
+
         dynamic GetValue(string key)
         {
-            key = GetActualKey(key);
-            return RawConfig[key];
+            var actualKey = GetActualKey(key);
+            var container = RawConfig[actualKey];
+            return GetValueFromContainer(container);
         }
 
         string GetActualKey(string key)
