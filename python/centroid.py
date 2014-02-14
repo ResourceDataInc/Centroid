@@ -2,7 +2,7 @@ import json
 
 class Config:
     def __init__(self, config):
-        if type(config) is dict:
+        if type(config) is dict or type(config) is list:
             self.raw_config = config
         else:
             self.raw_config = json.loads(config)
@@ -12,14 +12,13 @@ class Config:
 
     # config['key']
     def __getitem__(self, key):
-        key = _get_actual_key(key, self.raw_config)
-        if key is None:
-            raise Exception('Key not found in collection.')
-
         value = _get_value(key, self.raw_config)
-        if type(value) is dict:
+        if type(value) is dict or type(value) is list:
             return Config(value)
         return value
+
+    def __iter__(self):
+        return self.raw_config.__iter__()
 
     # to string
     def __str__(self):
@@ -48,7 +47,13 @@ def _get_normalised_key(unnormalisedKey):
     return unnormalisedKey.replace('_','').lower()
 
 def _get_value(key, hashtable):
-    return hashtable[_get_actual_key(key, hashtable)]
+    if type(key) is int:
+        return hashtable[key]
+
+    actual_key = _get_actual_key(key, hashtable)
+    if actual_key is None:
+        raise Exception('Key not found in collection.')
+    return hashtable[actual_key]
 
 def _get_actual_key(key, hashtable):
     result = [ k for k in hashtable.keys() if _get_normalised_key(key) == _get_normalised_key(k) ]

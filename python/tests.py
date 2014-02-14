@@ -9,6 +9,10 @@ class ConfigTest(unittest.TestCase):
         return '{"Environment": {"TheKey": "TheValue"}}'
 
     @property
+    def _json_config_with_array(self):
+        return '{"Array": [{"Key": "Value1"}, {"Key": "Value2"}]}'
+
+    @property
     def _shared_file_path(self):
         return 'config.json'
 
@@ -60,3 +64,22 @@ class ConfigTest(unittest.TestCase):
         config = Config('{"Prod": {"Shared": "production!"}, "All": {"Shared": "none"}}')
         config = config.for_environment("Prod")
         self.assertEqual(config.shared, "production!")
+
+    def test_indexing_json_array(self):
+        config = Config(self._json_config_with_array)
+        self.assertEqual(config.array[0].key, "Value1")
+        self.assertEqual(config.array[1].key, "Value2")
+
+    def test_enumerating_json_array(self):
+        config = Config(self._json_config_with_array)
+        itemCount = 0;
+        for item in config.array:
+            itemCount += 1
+        self.assertEqual(itemCount, 2)
+
+    def test_enumerating_json_object(self):
+        config = Config(self._json_config)
+        itemCount = 0;
+        for item in config:
+            itemCount += 1
+        self.assertEqual(itemCount, 1)
