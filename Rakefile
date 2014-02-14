@@ -24,6 +24,15 @@ namespace :package do
   end
 end
 
+namespace :release do
+  desc "Release .NET package"
+  task :cs  => ["package:cs"] do
+    Dir.glob("dot-net/build/pkg/*.nupkg") do |f|
+      system "dot-net/build/support/NuGet.exe", ["push", f], :clr_command => true
+    end
+  end
+end
+
 namespace :test do
   desc "Test .NET"
   test_runner :cs => [:build] do |cmd|
