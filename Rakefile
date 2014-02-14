@@ -56,9 +56,14 @@ namespace :test do
   task :py do
     system "python -m unittest python.tests"
   end
+
+  desc "Test ruby"
+  task :rb do
+    system "ruby ruby/test/centroid_test.rb"
+  end
 end
 
 desc "Test everything"
-task :test => ["test:cs", "test:py"]
+task :test => ["test:cs", "test:py", "test:rb"]
 
 task :default => :test
