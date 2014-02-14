@@ -97,3 +97,9 @@ class ConfigTest(unittest.TestCase):
         config = Config('{"Prod": {"Shared": "production!"}, "all": {"Shared": "none", "AllOnly": "works"}}')
         config = config.for_environment("Prod")
         self.assertEqual(config.all_only, "works")
+
+    def test_supports_deep_merge(self):
+        config = Config('{"Prod": {"Database": {"Server": "prod-sql"}}, "All": {"Database": {"MigrationsPath": "path/to/migrations"}}}')
+        config = config.for_environment("Prod")
+        self.assertEqual(config.database.server, "prod-sql")
+        self.assertEqual(config.database.migrations_path, "path/to/migrations")
