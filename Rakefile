@@ -25,7 +25,7 @@ namespace :package do
 
   desc "Package Python"
   task :py do
-    puts `cd python && python setup.py sdist`
+    system "cd python && python setup.py sdist"
   end
 end
 
@@ -39,7 +39,7 @@ namespace :release do
 
   desc "Release Python package"
   task :py do
-    exec "cd python && python setup.py sdist upload"
+    system "cd python && python setup.py sdist upload"
   end
 end
 
@@ -52,7 +52,7 @@ namespace :test do
 
   desc "Test python"
   task :py do
-    puts `python -m unittest python.tests`
+    system "python -m unittest python.tests"
   end
 end
 
