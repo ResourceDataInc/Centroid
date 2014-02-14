@@ -37,7 +37,7 @@ namespace Centroid.Tests
         public void test_raises_if_key_not_found()
         {
             dynamic config = new Config(JsonConfig);
-            Assert.Throws(Is.InstanceOf<Exception>(), delegate { var doesNotExist = config.DoesNotExist; });
+            Assert.Throws(Is.InstanceOf<Exception>(), () => Console.Write(config.DoesNotExist));
         }
 
         [Test]
