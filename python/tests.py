@@ -83,3 +83,9 @@ class ConfigTest(unittest.TestCase):
         for item in config:
             itemCount += 1
         self.assertEqual(itemCount, 1)
+
+    def test_supports_deep_merge(self):
+        config = Config('{"Prod": {"Database": {"Server": "prod-sql"}}, "All": {"Database": {"MigrationsPath": "path/to/migrations"}}}')
+        config = config.for_environment("Prod")
+        self.assertEqual(config.database.server, "prod-sql")
+        self.assertEqual(config.database.migrations_path, "path/to/migrations")
