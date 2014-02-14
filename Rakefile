@@ -22,6 +22,11 @@ namespace :package do
     end
     cmd.gen_symbols
   end
+
+  desc "Package Python"
+  task :py do
+    puts `cd python && python setup.py sdist`
+  end
 end
 
 namespace :release do
@@ -30,6 +35,11 @@ namespace :release do
     Dir.glob("dot-net/build/pkg/*.nupkg") do |f|
       system "dot-net/build/support/NuGet.exe", ["push", f], :clr_command => true
     end
+  end
+
+  desc "Release Python package"
+  task :py do
+    exec "cd python && python setup.py sdist upload"
   end
 end
 
