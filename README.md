@@ -28,9 +28,9 @@ Applications can consume this JSON configuration using Centroid's API.
 
 ### API
 
-Centroid's API is pretty simple. Centroid can load JSON configuration from a file or as a string, and then your application has access to the configuration values through object properties. Applications can choose retrieve the entire set of configuration or only the configuration appropriate for a specific enviroment.
+Centroid's API is pretty simple. Centroid can load JSON configuration from a file or as a string, and then your application has access to the configuration values through object properties. Applications can choose retrieve the entire set of configuration or only the configuration appropriate for a specific environment.
 
-Centroid also includes niceties that make interacting with the configuration a bit more clean. For example, the process to lookup a key in the config will ignore underscores and is case insensitive. This allows for storing the config in camelCase, while accessing it in camelCase or snake_case or PascalCase, therefore giving different languages the option to consume configuration using native language conventions.
+Centroid also includes niceties that make interacting with the configuration a bit more clean. For example, the process to look up a key in the configuration will ignore underscores and is case insensitive. This allows for storing the configuration in camelCase, while accessing it in snake_case or PascalCase (or camelCase), therefore giving different languages the option to consume configuration using native language conventions.
 
 The API is currently available in python and .NET.
 
@@ -44,7 +44,7 @@ config = Config.from_file("config.json")
 server = config.database.server_address # => "my-server.local"
 ```
 
-See the [python](python/README.md) API documention for information on how to install and use the python API.
+See the [python](python/README.md) API documentation for information on how to install and use the python API.
 
 #### .NET
 
@@ -61,7 +61,7 @@ See the [.NET](dot-net/README.md) API documentation for information on how to in
 
 #### Environments
 
-The API also includes a convenience method for retrieving configuration values for a specific environment. The environment specific configuration is merged with the configuration that applies to all environents, giving your application all the appropriate configuration for the specified environment.
+The API also includes a convenience method for retrieving configuration values for a specific environment. The environment specific configuration is merged with the configuration that applies to all environments, giving your application all the appropriate configuration for the specified environment.
 
 See the [python](python/README.md) and/or [.NET](dot-net/README.md) API documention for more details.
 

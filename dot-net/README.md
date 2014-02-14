@@ -49,9 +49,9 @@ var server = config.Database.ServerAddress; // => "my-server.local"
 
 ### ForEnviroment(environment)
 
-Typically real world applications have different configuration values depending on the environment. For example, you might have *dev* and *prod* environments that use different servers, user accounts, etc. However, applications usually have other configuration that is the same across all enviroments. Centroid makes it easy to retrieve all the configuration you need for a specific environment.
+Typically real world applications have different configuration values depending on the environment. For example, you might have *dev* and *prod* environments that use different servers, user accounts, etc. However, applications usually have other configuration that is the same across all environments. Centroid makes it easy to retrieve all the configuration you need for a specific environment.
 
-In enviroment based configuration, the top level objects in the JSON represent the various environments. You place the configuration that is the same across all enviroments in the *all* environment. 
+In environment based configuration, the top level objects in the JSON represent the various environments. You place the configuration that is the same across all environments in the *all* environment. 
 
 ```json
 {
@@ -73,7 +73,7 @@ In enviroment based configuration, the top level objects in the JSON represent t
 }
 ```
 
-The instance method `ForEnvironment` is then used to retrieve the enviroment based configuration. Centroid merges the requested environment's configuration with the *all* environment configuration. In the following example, the configuration for `prod` is merged with the configuration from `all` and the result is then available from a new instance of `Config`.
+The instance method `ForEnvironment` is then used to retrieve the environment based configuration. Centroid merges the requested environment's configuration with the *all* environment configuration. In the following example, the configuration for `prod` is merged with the configuration from `all` and the result is then available from a new instance of `Config`.
 
 ```cs
 // ForEnvironment.cs
