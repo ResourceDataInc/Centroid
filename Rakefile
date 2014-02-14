@@ -22,6 +22,11 @@ namespace :package do
     end
     cmd.gen_symbols
   end
+
+  desc "Package Python"
+  task :py do
+    puts `cd python && python setup.py sdist`
+  end
 end
 
 namespace :release do
