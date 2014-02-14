@@ -36,6 +36,11 @@ namespace :release do
       system "dot-net/build/support/NuGet.exe", ["push", f], :clr_command => true
     end
   end
+
+  desc "Release Python package"
+  task :py do
+    exec "cd python && python setup.py sdist upload"
+  end
 end
 
 namespace :test do
