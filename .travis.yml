@@ -12,3 +12,6 @@ before_install:
 
 script:
  - rake test
+
+notifications:
+  email: false
