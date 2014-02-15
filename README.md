@@ -10,7 +10,7 @@ A centralized paradigm to configuration management.
 
 In our experience, multiple projects related to one another will eventually need access to the same configuration. This can be problematic when the projects are built upon different technologies. Our solution is to extract the configuration to a shared JSON file, and provide means to access the values from various languages.
 
-Centroid is library for loading configuration values declared in JSON, and accessing those configuration values using object properties.
+Centroid is a tool for loading configuration values declared in JSON, and accessing those configuration values using object properties.
 
 ## Usage
 

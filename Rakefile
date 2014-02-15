@@ -14,7 +14,9 @@ namespace :package do
     cmd.out = "dot-net/build/pkg"
     cmd.files = ["dot-net/Centroid/Centroid.csproj"]
     cmd.with_metadata do |m|
-      m.description = "Centralized configuration management."
+      m.id = "Centroid"
+      m.summary = "A centralized paradigm to configuration management."
+      m.description = "Centroid is a tool for loading configuration values declared in JSON, and accessing those configuration values using object properties."
       m.authors = "Resource Data, Inc."
       m.version = "1.0.0"
       m.license_url = "https://github.com/ResourceDataInc/Centroid/blob/master/LICENSE.txt"
