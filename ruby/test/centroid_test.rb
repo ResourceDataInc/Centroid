@@ -23,9 +23,25 @@ class ConfigTests < Test::Unit::TestCase
 
   def test_raises_if_key_not_found
     config = Centroid::Config.new(json_config)
-    assert_raise Exception do
+
+    exception = assert_raise KeyError do
       config = config.does_not_exist
     end
+
+    assert exception.message =~ /does not contain/i, "Message should indicate key does not exist"
+    assert exception.message =~ /does_not_exist/, "Message should contain missing key"
+  end
+
+  def test_raises_if_duplicate_normalized_keys_exist
+    json = '{ "someKey": "value", "some_key": "value" }'
+
+    exception = assert_raise KeyError do
+      Centroid::Config.new(json)
+    end
+
+    assert exception.message =~ /duplicate/i, "Message should indicate duplicate key"
+    assert exception.message =~ /someKey/, "Message should contain duplicate key"
+    assert exception.message =~ /some_key/, "Message should contain duplicate key"
   end
 
   def test_readable_using_snake_case_property

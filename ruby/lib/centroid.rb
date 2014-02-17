@@ -9,6 +9,7 @@ module Centroid
         @raw_config = config
       else
         @raw_config = JSON.parse(config)
+        validate_unique_keys!
       end
     end
 
@@ -19,7 +20,7 @@ module Centroid
     def [](key)
       value = find_value(key, raw_config)
 
-      raise Exception.new("Key not found in collection.") if value.nil?
+      raise KeyError.new("Centroid::Config instance does not contain key: #{key}") if value.nil?
 
       if value.is_a?(Hash)
         Config.new(value)
@@ -48,7 +49,9 @@ module Centroid
       self.new(str_json)
     end
 
-    def normalised_key(unnormalised_key)
+    private
+
+    def normalize_key(unnormalised_key)
       unnormalised_key.to_s.gsub("_", "").downcase
     end
 
@@ -57,7 +60,17 @@ module Centroid
     end
 
     def actual_key(key, hashtable)
-      hashtable.keys.find { |k| normalised_key(key) == normalised_key(k) }
+      hashtable.keys.find { |k| normalize_key(key) == normalize_key(k) }
+    end
+
+    def validate_unique_keys!
+      normalized_keys = raw_config.keys.map { |k| { key: k, normalized_key: normalize_key(k) } }
+      dups = normalized_keys.group_by { |nk| nk[:normalized_key] }.select { |_, g| g.size > 1 }
+
+      return if dups.empty?
+
+      keys = dups.values.flat_map { |d| d.map { |e| e[:key] } }
+      raise KeyError, "Centroid::Config instance contains duplicate keys: #{keys.join(', ')}"
     end
   end
 end
