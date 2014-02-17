@@ -8,9 +8,9 @@ A centralized paradigm to configuration management.
 
 ## About
 
-In our experience, multiple projects related to one another will eventually need access to the same configuration. This can be problematic when the projects are built upon different technologies. Our solution is to extract the configuration to a shared JSON file, and provide means to access the values from various languages.
+In our experience, multiple projects related to one another will eventually need access to the same configuration. This can be problematic when the projects are built upon different technologies. Our solution is to extract the configuration to a shared JSON file and provide means to access the values from various languages.
 
-Centroid is a tool for loading configuration values declared in JSON, and accessing those configuration values using object properties.
+Centroid is a tool for loading configuration values declared in JSON and accessing those configuration values using object properties.
 
 ## Usage
 
@@ -28,15 +28,15 @@ Applications can consume this JSON configuration using Centroid's API.
 
 ### API
 
-Centroid's API is pretty simple. Centroid can load JSON configuration from a file or as a string, and then your application has access to the configuration values through object properties. Applications can choose retrieve the entire set of configuration or only the configuration appropriate for a specific environment.
+Centroid's API is pretty simple. Centroid can load JSON configuration from a file or as a string, and then your application has access to the configuration values through object properties. Applications can choose to retrieve the entire set of configuration or only the configuration appropriate for a specific environment.
 
-Centroid also includes niceties that make interacting with the configuration a bit more clean. For example, the process to look up a key in the configuration will ignore underscores and is case insensitive. This allows for storing the configuration in camelCase, while accessing it in snake_case or PascalCase (or camelCase), therefore giving different languages the option to consume configuration using native language conventions.
+Centroid also includes niceties that make interacting with the configuration a bit cleaner. For example, the process to look up a key in the configuration will ignore underscores and is case insensitive. This allows for storing the configuration in camelCase, while accessing it in snake_case or PascalCase (or camelCase), therefore giving different languages the option to consume configuration using native language conventions.
 
-The API is currently available in python and .NET.
+The API is currently available in Python and .NET.
 
 #### Python
 
-Here's a python example that loads a `config.json` file containing the JSON declared above and then retrieves the database's server address using a snake_case property `database.server_address`.
+Here's a Python example that loads a `config.json` file containing the JSON declared above and then retrieves the database's server address using a snake_case property `database.server_address`.
 
 ```py
 # my_app.py
@@ -44,7 +44,7 @@ config = Config.from_file("config.json")
 server = config.database.server_address # => "my-server.local"
 ```
 
-See the [python](python/README.md) API documentation for information on how to install and use the python API.
+See the [Python](python/README.md) API documentation for information on how to install and use the Python API.
 
 #### .NET
 
@@ -63,7 +63,7 @@ See the [.NET](dot-net/README.md) API documentation for information on how to in
 
 The API also includes a convenience method for retrieving configuration values for a specific environment. The environment specific configuration is merged with the configuration that applies to all environments, giving your application all the appropriate configuration for the specified environment.
 
-See the [python](python/README.md) and/or [.NET](dot-net/README.md) API documention for more details.
+See the [Python](python/README.md) and/or [.NET](dot-net/README.md) API documention for more details.
 
 ## Contributing
 
