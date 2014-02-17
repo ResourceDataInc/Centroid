@@ -40,7 +40,7 @@ server = config.database.server_address # => "my-server.local"
 
 #### Config(json)
 
-Alternatively you can create an instance of `Config` by passing a JSON string to the `Config` constructor.
+Alternatively, you can create an instance of `Config` by passing a JSON string to the `Config` constructor.
 
 ```py
 # from_string.py
@@ -75,7 +75,9 @@ In environment-based configuration, the top-level objects in the JSON represent 
 }
 ```
 
-Then, in the `Config` instance, use the instance method `for_environment` to retrieve the environment-based configuration. Centroid merges the requested environment's configuration values with the *all* environment configuration values. In the following example, the configuration for `prod` is merged with the configuration from `all`; the result is then available from a new instance of `Config`.
+Then, in the `Config` instance, use the instance method `for_environment` to retrieve the environment-based configuration. Centroid merges the requested environment's configuration values with the *all* environment configuration values. 
+
+In the following example, the configuration for `prod` is merged with the configuration from `all`; the result is then available from a new instance of `Config`.
 
 ```py
 # for_enviroment.py
@@ -86,4 +88,4 @@ solution_path = config.keys.ssh # => "path/to/id_rsa.pub"
 
 ## Contributing
 
-See the [contributing section of the main README](../README.md#contributing).
+See the [Contributing section of the main README](../README.md#contributing).
