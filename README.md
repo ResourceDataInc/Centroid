@@ -48,7 +48,7 @@ See the [Python](python/README.md) API documentation for information on how to i
 
 #### .NET
 
-Below is a C# example that loads the JSON file as a string and then retrieves the database's server address using a PascalCase property `Database.ServerAddress`.
+Below is a C# example that loads the JSON as a string and then retrieves the database's server address using a PascalCase property `Database.ServerAddress`.
 
 ```cs
 // MyApp.cs
