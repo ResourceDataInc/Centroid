@@ -18,7 +18,7 @@ Begin by declaring your application's configuration values in JSON. The followin
 }
 ```
 
-.NET applications can consume this JSON configuration using Centroid's .NET API.
+With Centroid's API, .NET applications can then use the configuration values in this JSON.
 
 ### .NET API
 
