@@ -4,7 +4,7 @@
 
 The Centroid Ruby package is hosted at [rubygems.org](https://rubygems.org/gems/centroid).
 
-You can install Centroid using gem with `gem install centroid`, or you can download, unpack, then `bundle install` and `rake install` from the `/ruby` directory.
+You can install Centroid using gem with `gem install centroid`, or you can clone the repo, then `gem build centroid.gemspec`, and `gem install -l centroid` from the `ruby/` directory.
 
 ## Usage
 
