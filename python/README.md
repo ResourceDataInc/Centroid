@@ -18,7 +18,7 @@ Begin by declaring your application's configuration values in JSON. The followin
 }
 ```
 
-Python applications can consume this JSON using Centroid's Python API.
+With Centroid's API, Python applications can then use the configuration values in this JSON.
 
 ### Python API
 
