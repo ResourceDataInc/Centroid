@@ -24,13 +24,13 @@ With Centroid's API, Ruby applications can then use the configuration values in 
 
 The Ruby API is available through the `Centroid::Config` class, an instance of which is used to consume the JSON.
 
-The `Config` class exposes the static `from_file` method, a constructor, and the instance method `for_environment`.
+The `Config` class exposes the `from_file` class method, an initializer, and the instance method `for_environment`.
 
 #### from_file(filename)
 
-You can create an instance of `Config` from a JSON file using the static `Centroid::Config.from_file(filename)` method.
+You can create an instance of `Config` from a JSON file using the `Centroid::Config.from_file(filename)` class method.
 
-In the example below, note the `serverAddress` configuration value is retrieved using the PascalCase `ServerAddress` property even though the value is specified as camelCase in the JSON.
+In the example below, note the `serverAddress` configuration value is retrieved using the snake_case `server_address` method even though the value is specified as camelCase in the JSON.
 
 ```rb
 # from_file.rb
@@ -40,7 +40,7 @@ server = config.database.server_address # => "my-server.local"
 
 ### Config(json)
 
-Alternatively, you can create an instance of `Config` by passing a JSON string to the `Config` constructor.
+Alternatively, you can create an instance of `Config` by passing a JSON string to the `Config` initializer.
 
 ```rb
 # from_string.rb
@@ -53,7 +53,7 @@ server = config.database.server_address # => "my-server.local"
 
 Typically, real-world applications have different configuration values depending on the environment. For example, you might have *dev* and *prod* environments that use different servers, user accounts, etc. However, applications usually have other configuration values that are the same across all environments. Centroid makes it easy to retrieve all the configuration values you need for a specific environment.
 
-In environment-based configuration, the top-level objects in the JSON represent the various environments. Place the configuration values that are the same across all environments within the *all* environment. 
+In environment-based configuration, the top-level objects in the JSON represent the various environments. Place the configuration values that are the same across all environments within the *all* environment.
 
 ```json
 {
@@ -75,7 +75,7 @@ In environment-based configuration, the top-level objects in the JSON represent 
 }
 ```
 
-Then, in the `Config` instance, use the instance method `for_environment` to retrieve the environment-based configuration. Centroid merges the requested environment's configuration values with the *all* environment configuration values. 
+Then, in the `Config` instance, use the instance method `for_environment` to retrieve the environment-based configuration. Centroid merges the requested environment's configuration values with the *all* environment configuration values.
 
 In the following example, the configuration for `prod` is merged with the configuration from `all`; the result is then available from a new instance of `Config`.
 

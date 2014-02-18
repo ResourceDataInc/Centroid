@@ -48,7 +48,7 @@ See the [Python](python/README.md) API documentation for information on how to i
 
 #### Ruby
 
-Here's a Ruby example that loads the JSON as a string and then retrieves the web server deploy directory using a sname_case property `webapp.deploy_dir`.
+Below is a Ruby example that loads the JSON as a string and then retrieves the database's server address using a snake_case property `config.webap.deploy_dir`.
 
 ```rb
 # my_app.rb
