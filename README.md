@@ -24,7 +24,7 @@ Start by declaring your application's configuration values in JSON. The followin
 }
 ```
 
-Applications can consume this JSON using Centroid's API.
+With Centroid's API, applications can then use the configuration values in this JSON.
 
 ### API
 
