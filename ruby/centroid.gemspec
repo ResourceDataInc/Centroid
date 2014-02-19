@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'centroid'
-  s.version = '0.1.0'
+  s.version = '0.1.1'
   s.summary = 'A centralizaed paradigm to configuration management.'
   s.description = 'Centroid is a tool for loading configuration values declared in JSON, and accessing those configuration values using object properties.'
   s.author = 'Resource Data, Inc'
