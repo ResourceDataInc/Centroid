@@ -13,6 +13,7 @@ namespace Centroid
         public Config(string json)
         {
             RawConfig = JObject.Parse(json);
+            ValidateUniqueKeys();
         }
 
         public Config(dynamic config)
@@ -94,6 +95,12 @@ namespace Centroid
             return RawConfig.GetEnumerator();
         }
 
+        public override IEnumerable<string> GetDynamicMemberNames()
+        {
+            var container = (JObject) RawConfig;
+            return container.Properties().Select(p => p.Name);
+        }
+
         static string NormaliseKey(string key)
         {
             return key.Replace("_", String.Empty).ToLower();
@@ -123,9 +130,18 @@ namespace Centroid
 
         string GetActualKey(string key)
         {
-            var properties = (IEnumerable<dynamic>) RawConfig.Properties();
-            var keys = properties.Select(property => property.Name);
-            return keys.Single(m => NormaliseKey(m) == NormaliseKey(key));
+            return GetDynamicMemberNames().Single(m => NormaliseKey(m) == NormaliseKey(key));
+        }
+
+        void ValidateUniqueKeys()
+        {
+            var normalizedKeys = GetDynamicMemberNames().Select(p => new { Key = p, NormalizedKey = NormaliseKey(p) });
+            var duplicates = normalizedKeys.GroupBy(nk => nk.NormalizedKey).Where(g => g.Count() > 1).ToArray();
+
+            if (!duplicates.Any()) return;
+
+            var keys = duplicates.SelectMany(d => d.Select(x => x.Key));
+            throw new InvalidOperationException("Centroid.Config instance contains duplicate keys: " + string.Join(", ", keys));
         }
     }
 }
