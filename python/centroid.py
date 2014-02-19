@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 
 class Config:
     def __init__(self, config):
@@ -6,6 +7,7 @@ class Config:
             self.raw_config = config
         else:
             self.raw_config = json.loads(config)
+            self._validate_unique_keys()
 
     def __getattr__(self, attrib):
         return self[attrib]
@@ -23,6 +25,19 @@ class Config:
     # to string
     def __str__(self):
         return str(json.dumps(self.raw_config))
+
+    def _validate_unique_keys(self):
+        normalized_keys = defaultdict(list)
+        for key, _ in self.raw_config.iteritems():
+            normalized_keys[_get_normalised_key(key)].append(key)
+
+        dups = list()
+        for _, value in normalized_keys.iteritems():
+            if len(value) > 1:
+                dups.extend(value)
+
+        if len(dups) > 0:
+            raise KeyError("centroid.Config instance contains duplicate keys: " + ", ".join(dups))
 
     def for_environment(self, env):
         env_json = self.raw_config[env]
@@ -52,13 +67,11 @@ def _get_value(key, hashtable):
 
     actual_key = _get_actual_key(key, hashtable)
     if actual_key is None:
-        raise Exception('Key not found in collection.')
+        raise KeyError('centroid.Config instance does not contain key: ' + key)
     return hashtable[actual_key]
 
 def _get_actual_key(key, hashtable):
     result = [ k for k in hashtable.keys() if _get_normalised_key(key) == _get_normalised_key(k) ]
     if len(result) > 0:
-        if len(result) > 1:
-            raise Exception('Too many matching keys in collection.')
         return result[0]
     return None
