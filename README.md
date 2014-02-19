@@ -32,7 +32,7 @@ Centroid's API is pretty simple. Centroid can load the JSON as a file or a strin
 
 Centroid also includes niceties that make interacting with the configuration values a bit cleaner. For example, the process to look up a key in the JSON ignores underscores and is case insensitive. This feature allows you to store the configuration value in camelCase while accessing it in snake_case, PascalCase, or camelCase, giving the option to consume the configuration values using native-language conventions.
 
-The API is currently available in Python and .NET.
+The API is currently available in Python, Ruby, and .NET.
 
 #### Python
 
@@ -45,6 +45,18 @@ server = config.database.server_address # => "my-server.local"
 ```
 
 See the [Python](python/README.md) API documentation for information on how to install and use the Python API.
+
+#### Ruby
+
+Below is a Ruby example that loads the JSON as a string and then retrieves the database's server address using a snake_case property `config.webap.deploy_dir`.
+
+```rb
+# my_app.rb
+config = Centroid::Config.new('{ "webapp": { "deployDir": "/path/to/webapp/deploy" } }')
+deploy = config.webapp.deploy_dir # => "/path/to/webapp/deploy"
+```
+
+See the [Ruby](ruby/README.md) API documentation for information on how to install and use the Ruby API.
 
 #### .NET
 
