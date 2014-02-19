@@ -29,6 +29,11 @@ namespace :package do
   task :py do
     system "cd python && python setup.py sdist"
   end
+
+  desc "Package Ruby"
+  task :rb do
+    system "git clean *.gem -fx && cd ruby && gem build centroid.gemspec"
+  end
 end
 
 namespace :release do
@@ -43,6 +48,13 @@ namespace :release do
   task :py do
     system "cd python && python setup.py sdist upload"
   end
+
+  desc "Release Ruby package"
+  task :rb => ["package:rb"] do
+    Dir['ruby/*.gem'].each do |f|
+      system "gem push #{f}"
+    end
+  end
 end
 
 namespace :test do
@@ -56,9 +68,14 @@ namespace :test do
   task :py do
     system "python -m unittest python.tests"
   end
+
+  desc "Test ruby"
+  task :rb do
+    system "ruby ruby/test/centroid_test.rb"
+  end
 end
 
 desc "Test everything"
-task :test => ["test:cs", "test:py"]
+task :test => ["test:cs", "test:py", "test:rb"]
 
 task :default => :test
