@@ -1,36 +1,26 @@
 # Centroid - Python
 
+This readme file includes information specific to Python in Centroid. Refer to the [Centroid Readme file] (../README.md) for general information, including information the JSON configuration file. 
+
 ## Installation
 
 The Centroid Python package is hosted at [PyPi](https://pypi.python.org/pypi/centroid). 
 
-You can install Centroid using pip with `pip install centroid`, or you can download Centroid, unpack, and `python setup.py install` it.
+Install Centroid using pip with `pip install centroid` or by downloading Centroid, unpacking it, and using `python setup.py install`.
 
-## Usage
+## Centroid.Config Class with Python
 
-Begin by declaring your application's configuration values in JSON. The following example stores the database's server address.
+In Python, the `Centroid.Config` class exposes the following: 
 
-```json
-{
-    "database": {
-        "serverAddress": "my-server.local"
-    }
-}
-```
++ Static `from_file` method
++ Constructor
++ `for_environment` instance method
 
-With Centroid's API, Python applications can then use the configuration values in this JSON.
+> *Note:* The examples given in the following sections are based on the JSON configuration file examples in the [Centroid Readme file] (../README.md). 
 
-### Python API
+### from_file Method
 
-The Python API is available through the `centroid.Config` class, an instance of which is used to consume the JSON. 
-
-The `Config` class exposes the static `from_file` method, a constructor, and the instance method `for_environment`.
-
-#### from_file(filename)
-
-You can create an instance of `Config` from a JSON file using the static `Config.from_file(filename)` method.
-
-In the example below, note the `serverAddress` configuration value is retrieved using the snake_case `server_address` property even though the value is specified as camelCase in the JSON.
+Using the static `Config.from_file(filename)` method, you can create an instance of `Config` from a JSON file, as in the example below. 
 
 ```py
 # from_file.py
@@ -38,9 +28,9 @@ config = Config.from_file("config.json")
 server = config.database.server_address # => "my-server.local"
 ```
 
-#### Config(json)
+### Config Constructor
 
-Alternatively, you can create an instance of `Config` by passing a JSON string to the `Config` constructor.
+To load a string instead of a file, create an instance of `Config` by passing a JSON string to the `Config` constructor, as in the following example.
 
 ```py
 # from_string.py
@@ -49,35 +39,13 @@ config = Config(json)
 server = config.database.server_address # => "my-server.local"
 ```
 
-#### for_enviroment(environment)
+### for_enviroment Instance Method
 
-Typically, real-world applications have different configuration values depending on the environment. For example, you might have *dev* and *prod* environments that use different servers, user accounts, etc. However, applications usually have other configuration values that are the same across all environments. Centroid makes it easy to retrieve all of the configuration values you need for a specific environment.
+In the `Config` instance, you can use the `for_environment` instance method to retrieve the configuration values for an environment. 
 
-In environment-based configuration, the top-level objects in the JSON represent the various environments. Place the configuration values that are the same in all environments within the *all* environment. 
+If you specify an environment in `for_environment`, Centroid will merge the requested environment's configuration values with the values in *all*. Refer to [Examples in the Centroid Readme file] (../README.md#examples) for information on creating an environment-based JSON configuration file. 
 
-```json
-{
-    "dev": {
-        "someResource": {
-            "server": "resource-dev.local"
-        }
-    },
-    "prod": {
-        "someResource": {
-            "server": "resource-prod.local"
-        }
-    },
-    "all": {
-        "keys": {
-            "ssh": "path/to/id_rsa.pub"
-        }
-    }
-}
-```
-
-Then, in the `Config` instance, use the instance method `for_environment` to retrieve the environment-based configuration. Centroid merges the requested environment's configuration values with the *all* environment configuration values. 
-
-In the following example, the configuration for `prod` is merged with the configuration from `all`; the result is then available from a new instance of `Config`.
+With the following example, Centroid will merge the configuration for *prod* with the configuration for *all*; the result is then available from a new instance of `Config`.
 
 ```py
 # for_enviroment.py
@@ -85,7 +53,3 @@ config = Config.from_file("config.json").for_environment("prod")
 server = config.some_resource.server # => "resource-prod.local"
 solution_path = config.keys.ssh # => "path/to/id_rsa.pub"
 ```
-
-## Contributing
-
-See the [Contributing section of the main README](../README.md#contributing).
