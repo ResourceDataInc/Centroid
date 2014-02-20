@@ -67,7 +67,7 @@ Also create an *all* top-level object. List the configuration values that are th
 ```
 > *Note:*	Refer to the [language-specific readme files] (#language_specific) for information on using the environment instance method to retrieve environment-based configurations.
 
-### API (Centroid.Config Class)
+### API (Config Class)
 > *Note:*	These Config class examples assume a JSON configuration file with the following: 
 
 ```json
