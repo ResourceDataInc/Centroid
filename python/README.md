@@ -10,7 +10,7 @@ Install Centroid using pip with `pip install centroid` or by downloading Centroi
 
 ## Centroid.Config Class with Python
 
-In Python, the `Centroid.Config` class exposes the following: 
+In Python, the `centroid.Config` class exposes the following: 
 
 + Static `from_file` method
 + Constructor
