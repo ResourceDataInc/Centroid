@@ -45,23 +45,10 @@ If you specify an environment in `ForEnvironment`, Centroid will merge the reque
 
 With the following example, Centroid will merge the configuration for *prod* with the configuration for *all*; the result is then available from a new instance of `Config`.
 
-```json
-{
-    "dev": {
-        "someResource": {
-            "server": "resource-dev.local"
-        }
-    },
-    "prod": {
-        "someResource": {
-            "server": "resource-prod.local"
-        }
-    },
-    "all": {
-        "keys": {
-            "ssh": "path/to/id_rsa.pub"
-        }
-    }
-}
+```cs
+// ForEnvironment.cs
+var config = Config.FromFile("config.json").ForEnvironment("Prod");
+var server = config.Database.Server; // => "sql-prod.local"
+var solutionPath = config.Solutions.Main; // => "path/to/Main.sln";
 ```
 
