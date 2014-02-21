@@ -37,7 +37,7 @@ dynamic config = new Config(json);
 var server = config.Database.ServerAddress; // => "my-server.local"
 ```
 
-### ForEnviroment Instance Method
+### ForEnvironment Instance Method
 
 In the `Config` instance, you can use the `ForEnvironment` instance method to retrieve the configuration values for an environment. 
 
