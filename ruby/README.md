@@ -1,36 +1,24 @@
 # Centroid - Ruby
 
+This document includes information specific to Ruby in Centroid. Refer to the [Centroid document] (../README.md) for general information, including information the JSON configuration file. 
+
 ## Installation
 
-The Centroid Ruby package is hosted at [rubygems.org](https://rubygems.org/gems/centroid).
+The Centroid Ruby package is hosted at [rubygems.org](https://rubygems.org/gems/centroid). Install Centroid using gem with `gem install centroid` or clone the repo and then `gem build centroid.gemspec` and `gem install -l centroid` from the `ruby/` directory.
 
-You can install Centroid using gem with `gem install centroid`, or you can clone the repo, then `gem build centroid.gemspec`, and `gem install -l centroid` from the `ruby/` directory.
+## Config Class with Ruby
 
-## Usage
+In Ruby, the `Centroid::Config` class exposes the following: 
 
-Begin by declaring your application's configuration values in JSON. The following example stores the database's server address.
++ Static `from_file` class method
++ Initializer
++ `for_environment` instance method
 
-```json
-{
-    "database": {
-        "serverAddress": "my-server.local"
-    }
-}
-```
+> *Note:* The examples given in the following sections are based on the JSON configuration file examples in the [Centroid document] (../README.md#examples). 
 
-With Centroid's API, Ruby applications can then use the configuration values in this JSON.
+### from_file Class Method
 
-### Ruby API
-
-The Ruby API is available through the `Centroid::Config` class, an instance of which is used to consume the JSON.
-
-The `Config` class exposes the `from_file` class method, an initializer, and the instance method `for_environment`.
-
-#### from_file(filename)
-
-You can create an instance of `Config` from a JSON file using the `Centroid::Config.from_file(filename)` class method.
-
-In the example below, note the `serverAddress` configuration value is retrieved using the snake_case `server_address` method even though the value is specified as camelCase in the JSON.
+Using the static `Centroid::Config.from_file(filename)` class method, you can create an instance of `Config` from a JSON file, as in the example below. 
 
 ```rb
 # from_file.rb
@@ -38,9 +26,9 @@ config = Centroid::Config.from_file("config.json")
 server = config.database.server_address # => "my-server.local"
 ```
 
-### Config(json)
+### Config Initializer
 
-Alternatively, you can create an instance of `Config` by passing a JSON string to the `Config` initializer.
+To load a string instead of a file, create an instance of `Config` by passing a JSON string to the `Config` initializer, as in the following example.
 
 ```rb
 # from_string.rb
@@ -49,35 +37,13 @@ config = Centroid::Config(json)
 server = config.database.server_address # => "my-server.local"
 ```
 
-### for_enviroment(environment)
+### for_environment Instance Method
 
-Typically, real-world applications have different configuration values depending on the environment. For example, you might have *dev* and *prod* environments that use different servers, user accounts, etc. However, applications usually have other configuration values that are the same across all environments. Centroid makes it easy to retrieve all the configuration values you need for a specific environment.
+In the `Config` instance, you can use the `for_environment` instance method to retrieve the configuration values for an environment. 
 
-In environment-based configuration, the top-level objects in the JSON represent the various environments. Place the configuration values that are the same across all environments within the *all* environment.
+If you specify an environment in `for_environment`, Centroid will merge the requested environment's configuration values with the values in *all*. Refer to [Examples in the Centroid document] (../README.md#examples) for information on creating an environment-based JSON configuration file. 
 
-```json
-{
-    "dev": {
-        "someResource": {
-            "server": "resource-dev.local"
-        }
-    },
-    "prod": {
-        "someResource": {
-            "server": "resource-prod.local"
-        }
-    },
-    "all": {
-        "keys": {
-            "ssh": "path/to/id_rsa.pub"
-        }
-    }
-}
-```
-
-Then, in the `Config` instance, use the instance method `for_environment` to retrieve the environment-based configuration. Centroid merges the requested environment's configuration values with the *all* environment configuration values.
-
-In the following example, the configuration for `prod` is merged with the configuration from `all`; the result is then available from a new instance of `Config`.
+With the following example, Centroid will merge the configuration for *prod* with the configuration for *all*; the result is then available from a new instance of `Config`.
 
 ```rb
 # for_enviroment.rb
@@ -85,7 +51,3 @@ config = Centroid::Config.from_file("config.json").for_environment("prod")
 server = config.some_resource.server # => "resource-prod.local"
 solution_path = config.keys.ssh # => "path/to/id_rsa.pub"
 ```
-
-## Contributing
-
-See the [contributing section of the main README](../README.md#contributing)
