@@ -39,7 +39,7 @@ config = Config(json)
 server = config.database.server_address # => "my-server.local"
 ```
 
-### for_enviroment Instance Method
+### for_environment Instance Method
 
 In the `Config` instance, you can use the `for_environment` instance method to retrieve the configuration values for an environment. 
 
