@@ -1,6 +1,6 @@
 # Centroid - .NET
 
-This document includes information specific to .NET in Centroid. Refer to the [general Centroid document] (../README.md) for general information, including information the JSON configuration file. 
+This document includes information specific to .NET in Centroid. Refer to the [Centroid document] (../README.md) for general information, including information the JSON configuration file. 
 
 ## Installation
 
@@ -14,7 +14,7 @@ In .NET, the `Centroid.Config` class exposes the following:
 + Constructor
 + `ForEnvironment` instance method
 
-> *Note:* The examples given in the following sections are based on the JSON configuration file examples in the [primary Centroid document] (../README.md#examples). 
+> *Note:* The examples given in the following sections are based on the JSON configuration file examples in the [Centroid document] (../README.md#examples). 
 
 ### FromFile Method
 
@@ -41,7 +41,7 @@ var server = config.Database.ServerAddress; // => "my-server.local"
 
 In the `Config` instance, you can use the `ForEnvironment` instance method to retrieve the configuration values for an environment. 
 
-If you specify an environment in `ForEnvironment`, Centroid will merge the requested environment's configuration values with the values in *all*. Refer to [Examples in the primary Centroid document] (../README.md#examples) for information on creating an environment-based JSON configuration file. 
+If you specify an environment in `ForEnvironment`, Centroid will merge the requested environment's configuration values with the values in *all*. Refer to [Examples in the Centroid document] (../README.md#examples) for information on creating an environment-based JSON configuration file. 
 
 With the following example, Centroid will merge the configuration for *prod* with the configuration for *all*; the result is then available from a new instance of `Config`.
 
