@@ -77,14 +77,14 @@ Also create an *all* top-level object. List the configuration values that are th
     }
 }
 ```
-The following Python example demonstrates loading a file ('config.json') and retrieving the database’s server address using a snake_case property ('database.server_address'). 
+The following Python example demonstrates loading a file (`config.json`) and retrieving the database’s server address using a snake_case property (`database.server_address`). 
 
 ```py
 # my_app.py
 config = Config.from_file("config.json")
 server = config.database.server_address # => "my-server.local"
 ```
-The following C# example demonstrates loading the JSON as a string and then retrieving the database's server address using a PascalCase property ('Database.ServerAddress').
+The following C# example demonstrates loading the JSON as a string and then retrieving the database's server address using a PascalCase property (`Database.ServerAddress`).
 
 ```cs
 // MyApp.cs
