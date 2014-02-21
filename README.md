@@ -15,12 +15,12 @@ Centroid lets you take control of your configurations by making it easy to work 
 
 ## Using Centroid
 
-To use Centroid, you must first install the package for each desired language. Refer to the [language-specific readme files] (#language_specific) for installation instructions.
+To use Centroid, you must first install the package for each desired language. Refer to the [language-specific documents] (#language_specific) for installation instructions.
 
-Once a Centroid package is installed, complete the following two items. [Examples] (#examples) of both items are available later in this Readme.
+Once a Centroid package is installed, complete the following two items. [Examples] (#examples) of both items are available later in this document.
 
 1. Declare your application's configuration values in JSON. 
-1. Create an instance of the Centroid.Config class to use the API. Refer to the [language-specific readme files] (#language_specific) for details specific to each language.
+1. Create an instance of the Config class to use the API. Refer to the [language-specific documents] (#language_specific) for details specific to each language.
 
 ## Using Native-language Conventions
 Because Centroid ignores underscores and case, you can use native-language conventions to look up a key. 
@@ -65,7 +65,7 @@ Also create an *all* top-level object. List the configuration values that are th
     }
 }
 ```
-> *Note:*	Refer to the [language-specific readme files] (#language_specific) for information on using the environment instance method to retrieve environment-based configurations.
+> *Note:*	Refer to the [language-specific documents] (#language_specific) for information on using the environment instance method to retrieve environment-based configurations.
 
 ### API (Config Class)
 > *Note:*	These Config class examples assume a JSON configuration file with the following: 
@@ -92,14 +92,14 @@ var json = @"{ ""database"": { ""serverAddress"": ""my-server.local"" } }";
 dynamic config = new Config(json);
 var server = config.Database.ServerAddress; // => "my-server.local"
 ```
-Refer to the [language-specific readme files] (#language_specific) for additional details about using the API, including examples of using the environment instance method.
+Refer to the [language-specific documents] (#language_specific) for additional details about using the API, including examples of using the environment instance method.
 
-## <a name="language_specific"></a>Language-specific Readme Files
-Each language has a separate readme file with information specific to that language. 
+## <a name="language_specific"></a>Language-specific Documents
+Each language has a separate document with information specific to that language. 
 
-* [.NET Readme] (dot-net/README.md)
-* [Python Readme] (python/README.md)
-* [Ruby Readme] (ruby/README.md)
+* [.NET] (dot-net/README.md)
+* [Python] (python/README.md)
+* [Ruby] (ruby/README.md)
 
 ## Contributing
 To file a bug report or request a feature, open a new [GitHub Issue](https://github.com/ResourceDataInc/Centroid/issues/new).
