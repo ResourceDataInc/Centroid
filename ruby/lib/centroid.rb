@@ -17,6 +17,10 @@ module Centroid
       self[attrib]
     end
 
+    def respond_to_missing?(method_name, include_all)
+      has_key?(method_name)
+    end
+
     def [](key)
       value = find_value(key, raw_config)
 
@@ -28,6 +32,12 @@ module Centroid
         value
       end
     end
+
+    def has_key?(key)
+      !!actual_key(key, raw_config)
+    end
+
+    alias_method :include?, :has_key?
 
     def to_s
       JSON.dump(raw_config)
