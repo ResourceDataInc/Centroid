@@ -142,7 +142,7 @@ namespace Centroid.Tests
             }
             Assert.That(itemCount, Is.EqualTo(1));
         }
-            
+
         [Test]
         public void test_all_environment_is_not_case_sensitive()
         {
@@ -175,6 +175,14 @@ namespace Centroid.Tests
             dynamic config = new Config(json).ForEnvironment("Dev");
             Assert.That(config.Database.Server, Is.EqualTo("the-dev-database"));
             Assert.That(config.Database.MigrationsPath, Is.EqualTo("path/to/migrations"));
+        }
+
+        [Test]
+        public void test_contains_key()
+        {
+            dynamic config = new Config(JsonConfig);
+            Assert.That(config.ContainsKey("Environment"), Is.True);
+            Assert.That(config.ContainsKey("DoesNotExist"), Is.False);
         }
     }
 }

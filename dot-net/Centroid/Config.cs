@@ -35,6 +35,19 @@ namespace Centroid
             set { RawConfig[index] = value; }
         }
 
+        public bool ContainsKey(string key)
+        {
+            try
+            {
+                GetActualKey(key);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public dynamic ForEnvironment(string environment)
         {
             var envConfig = GetContainer(environment);
