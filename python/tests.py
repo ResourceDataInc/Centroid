@@ -103,3 +103,8 @@ class ConfigTest(unittest.TestCase):
         config = config.for_environment("Prod")
         self.assertEqual(config.database.server, "prod-sql")
         self.assertEqual(config.database.migrations_path, "path/to/migrations")
+
+    def test_has_key(self):
+        config = Config(self._json_config)
+        self.assertTrue("environment" in config)
+        self.assertTrue("does_not_exist" not in config)
