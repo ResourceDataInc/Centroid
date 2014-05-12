@@ -37,15 +37,7 @@ namespace Centroid
 
         public bool ContainsKey(string key)
         {
-            try
-            {
-                GetActualKey(key);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return GetActualKey(key) != null;
         }
 
         public dynamic ForEnvironment(string environment)
@@ -65,16 +57,14 @@ namespace Centroid
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            try
+            if (ContainsKey(binder.Name))
             {
                 result = GetValue(binder.Name);
                 return true;
             }
-            catch
-            {
-                result = null;
-                return false;
-            }
+
+            result = null;
+            return false;
         }
 
         public override bool TryConvert(ConvertBinder binder, out object result)
