@@ -9,9 +9,9 @@ namespace Centroid.Tests
     [TestFixture]
     public class ConfigTest
     {
-        const string JsonConfig = @"{""Environment"": {""TheKey"": ""TheValue""}}";
+        const string JsonConfig = @"{""theEnvironment"": {""theKey"": ""TheValue""}}";
 
-        const string JsonConfigWithArray = @"{""Array"": [{""Key"": ""Value1""}, {""Key"": ""Value2""}]}";
+        const string JsonConfigWithArray = @"{""theArray"": [{""theKey"": ""Value1""}, {""theKey"": ""Value2""}]}";
 
         readonly string sharedFilePath;
 
@@ -24,7 +24,7 @@ namespace Centroid.Tests
         public void test_create_from_string()
         {
             dynamic config = new Config(JsonConfig);
-            Assert.That(config.Environment.TheKey, Is.EqualTo("TheValue"));
+            Assert.That(config.TheEnvironment.TheKey, Is.EqualTo("TheValue"));
         }
 
         [Test]
@@ -56,14 +56,14 @@ namespace Centroid.Tests
         public void test_readable_using_snake_case_property()
         {
             dynamic config = new Config(JsonConfig);
-            Assert.That(config.environment.the_key, Is.EqualTo("TheValue"));
+            Assert.That(config.the_environment.the_key, Is.EqualTo("TheValue"));
         }
 
         [Test]
         public void test_environment_specific_config_is_included()
         {
             var config = new Config(JsonConfig);
-            dynamic environmentConfig = config.ForEnvironment("Environment");
+            dynamic environmentConfig = config.ForEnvironment("theEnvironment");
             Assert.That(environmentConfig.TheKey, Is.EqualTo("TheValue"));
         }
 
@@ -99,8 +99,8 @@ namespace Centroid.Tests
         public void test_modifying_raw_config()
         {
             dynamic config = new Config(JsonConfig);
-            config.RawConfig["Environment"]["TheKey"] = "NotTheValue";
-            Assert.That(config.Environment.TheKey, Is.EqualTo("NotTheValue"));
+            config.RawConfig["theEnvironment"]["theKey"] = "NotTheValue";
+            Assert.That(config.TheEnvironment.TheKey, Is.EqualTo("NotTheValue"));
         }
 
         [Test]
@@ -115,8 +115,8 @@ namespace Centroid.Tests
         public void test_indexing_json_array()
         {
             dynamic config = new Config(JsonConfigWithArray);
-            Assert.That(config.Array[0].Key, Is.EqualTo("Value1"));
-            Assert.That(config.Array[1].Key, Is.EqualTo("Value2"));
+            Assert.That(config.TheArray[0].TheKey, Is.EqualTo("Value1"));
+            Assert.That(config.TheArray[1].TheKey, Is.EqualTo("Value2"));
         }
 
         [Test]
@@ -124,11 +124,11 @@ namespace Centroid.Tests
         {
             dynamic config = new Config(JsonConfigWithArray);
             var itemCount = 0;
-            foreach (var item in config.Array)
+            foreach (var item in config.TheArray)
             {
                 itemCount++;
+                Assert.That(item.TheKey, Is.EqualTo(config.TheArray[itemCount -1].TheKey));
             }
-            Assert.That(itemCount, Is.EqualTo(2));
         }
 
         [Test]
