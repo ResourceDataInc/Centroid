@@ -142,5 +142,17 @@ namespace Centroid.Tests
             }
             Assert.That(itemCount, Is.EqualTo(1));
         }
+
+        [Test]
+        public void test_all_environment_is_not_case_sensitive()
+        {
+            var upperCaseAllConfig = new Config(@"{""Prod"": {""Shared"": ""production!""}, ""All"": {""Shared"": ""none"", ""AllOnly"": ""works""}}");
+            var upperCaseAllEnvironmentConfig = upperCaseAllConfig.ForEnvironment("Prod");
+            Assert.That(upperCaseAllEnvironmentConfig.AllOnly, Is.EqualTo("works"));
+
+            var lowerCaseAllConfig = new Config(@"{""Prod"": {""Shared"": ""production!""}, ""all"": {""Shared"": ""none"", ""AllOnly"": ""works""}}");
+            var lowerCaseAllEnvironmentConfig = lowerCaseAllConfig.ForEnvironment("Prod");
+            Assert.That(lowerCaseAllEnvironmentConfig.AllOnly, Is.EqualTo("works"));
+        }
     }
 }
