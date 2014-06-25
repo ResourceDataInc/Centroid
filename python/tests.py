@@ -26,8 +26,13 @@ class ConfigTest(unittest.TestCase):
 
     def test_raises_if_key_not_found(self):
         config = Config(self._json_config)
-        with self.assertRaises(Exception):
+        with self.assertRaisesRegexp(KeyError, "does_not_exist"):
             config = config.does_not_exist
+
+    def test_raises_if_duplicate_normalized_keys_exist(self):
+        json = '{ "someKey": "value", "some_key": "value" }'
+        with self.assertRaisesRegexp(KeyError, "duplicate.+someKey.+some_key"):
+            Config(json)
 
     def test_readable_using_snake_case_property(self):
         config = Config(self._json_config)

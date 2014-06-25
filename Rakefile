@@ -7,16 +7,22 @@ build :build do |cmd|
 end
 
 namespace :package do
+  desc "Package All"
+  task :all => ["package:cs", "package:py", "package:rb"]
+
   directory "dot-net/build/pkg"
   desc "Package .NET"
   nugets_pack :cs => ["dot-net/build/pkg", :test] do |cmd|
+    FileList["dot-net/build/pkg/*.nupkg"].each {|f| File.delete(f) }
     cmd.exe = "dot-net/build/support/NuGet.exe"
     cmd.out = "dot-net/build/pkg"
     cmd.files = ["dot-net/Centroid/Centroid.csproj"]
     cmd.with_metadata do |m|
-      m.description = "Centralized configuration management."
+      m.id = "Centroid"
+      m.summary = "A centralized paradigm to configuration management."
+      m.description = "Centroid is a tool for loading configuration values declared in JSON, and accessing those configuration values using object properties."
       m.authors = "Resource Data, Inc."
-      m.version = "1.0.0"
+      m.version = "1.0.1"
       m.license_url = "https://github.com/ResourceDataInc/Centroid/blob/master/LICENSE.txt"
       m.project_url = "https://github.com/ResourceDataInc/Centroid"
     end
@@ -25,11 +31,19 @@ namespace :package do
 
   desc "Package Python"
   task :py do
-    puts `cd python && python setup.py sdist`
+    system "cd python && python setup.py sdist"
+  end
+
+  desc "Package Ruby"
+  task :rb do
+    system "git clean *.gem -fx && cd ruby && gem build centroid.gemspec"
   end
 end
 
 namespace :release do
+  desc "Release All"
+  task :all => ["release:cs", "release:py", "release:rb"]
+
   desc "Release .NET package"
   task :cs  => ["package:cs"] do
     Dir.glob("dot-net/build/pkg/*.nupkg") do |f|
@@ -39,7 +53,14 @@ namespace :release do
 
   desc "Release Python package"
   task :py do
-    exec "cd python && python setup.py sdist upload"
+    system "cd python && python setup.py sdist upload"
+  end
+
+  desc "Release Ruby package"
+  task :rb => ["package:rb"] do
+    Dir['ruby/*.gem'].each do |f|
+      system "gem push #{f}"
+    end
   end
 end
 
@@ -52,11 +73,16 @@ namespace :test do
 
   desc "Test python"
   task :py do
-    puts `python -m unittest python.tests`
+    system "python -m unittest python.tests"
+  end
+
+  desc "Test ruby"
+  task :rb do
+    system "ruby ruby/test/centroid_test.rb"
   end
 end
 
 desc "Test everything"
-task :test => ["test:cs", "test:py"]
+task :test => ["test:cs", "test:py", "test:rb"]
 
 task :default => :test

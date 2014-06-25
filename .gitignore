@@ -10,6 +10,7 @@ Bin
 *.cache
 *.csproj.user
 dot-net/build/pkg
+*.userprefs
 
 _ReSharper.*
 *.resharper
@@ -19,3 +20,4 @@ TestResult.xml
 
 Gemfile.lock
 .bundle
+*.gem

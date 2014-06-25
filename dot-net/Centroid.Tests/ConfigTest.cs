@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using Microsoft.CSharp.RuntimeBinder;
 using NUnit.Framework;
 
 namespace Centroid.Tests
@@ -37,7 +38,18 @@ namespace Centroid.Tests
         public void test_raises_if_key_not_found()
         {
             dynamic config = new Config(JsonConfig);
-            Assert.Throws(Is.InstanceOf<Exception>(), delegate { var doesNotExist = config.DoesNotExist; });
+            var exception = Assert.Throws(Is.InstanceOf<RuntimeBinderException>(), () => Console.Write(config.DoesNotExist));
+            Assert.That(exception.Message, Is.StringContaining("DoesNotExist"));
+        }
+
+        [Test]
+        public void test_raises_if_duplicate_normalized_keys_exist()
+        {
+            const string json = @"{ ""someKey"": ""value"", ""some_key"": ""value"" }";
+            var exception = Assert.Throws<InvalidOperationException>(() => new Config(json));
+            Assert.That(exception.Message, Is.StringContaining("duplicate"));
+            Assert.That(exception.Message, Is.StringContaining("someKey"));
+            Assert.That(exception.Message, Is.StringContaining("some_key"));
         }
 
         [Test]
