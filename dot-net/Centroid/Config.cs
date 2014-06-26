@@ -35,6 +35,11 @@ namespace Centroid
             set { RawConfig[index] = value; }
         }
 
+        public bool ContainsKey(string key)
+        {
+            return GetActualKey(key) != null;
+        }
+
         public dynamic ForEnvironment(string environment)
         {
             var envConfig = GetContainer(environment);
@@ -52,16 +57,14 @@ namespace Centroid
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            try
+            if (ContainsKey(binder.Name))
             {
                 result = GetValue(binder.Name);
                 return true;
             }
-            catch
-            {
-                result = null;
-                return false;
-            }
+
+            result = null;
+            return false;
         }
 
         public override bool TryConvert(ConvertBinder binder, out object result)

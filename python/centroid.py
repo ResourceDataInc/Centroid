@@ -50,6 +50,9 @@ class Config:
 
         return Config(_dict_merge(all_json, env_json))
 
+    def __contains__(self, key):
+        return _get_actual_key(key, self.raw_config) is not None
+
     @staticmethod
     def from_file(filename):
         with open(filename) as json_file:

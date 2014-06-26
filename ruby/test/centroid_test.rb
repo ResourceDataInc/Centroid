@@ -101,4 +101,16 @@ class ConfigTests < Test::Unit::TestCase
     assert_equal(config.database.server, "prod-sql")
     assert_equal(config.database.migrations_path, "path/to/migrations")
   end
+
+  def test_has_key
+    config = Centroid::Config.new(json_config)
+    assert(config.has_key?("environment"))
+    assert(!config.has_key?("does_not_exist"))
+  end
+
+  def test_respond_to
+    config = Centroid::Config.new(json_config)
+    assert(config.respond_to?(:environment))
+    assert(!config.respond_to?(:does_not_exist))
+  end
 end

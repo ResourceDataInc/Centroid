@@ -13,6 +13,7 @@ In .NET, the `Centroid.Config` class exposes the following:
 + Static `FromFile` method
 + Constructor
 + `ForEnvironment` instance method
++ `ContainsKey` instance method
 
 > *Note:* The examples given in the following sections are based on the JSON configuration file examples in the [Centroid document] (../README.md#examples). 
 
@@ -52,3 +53,13 @@ var server = config.Database.Server; // => "sql-prod.local"
 var solutionPath = config.Solutions.Main; // => "path/to/Main.sln";
 ```
 
+### ContainsKey Instance Method
+
+In a `Config` instance, you can use the `ContainsKey` method to determine if a key exists. This method uses the same case and underscore rules as is used for value lookups.
+
+```cs
+var json = @"{ ""Database"": { ""Server"": ""my-server.local"" } }";
+dynamic config = new Config(json);
+config.ContainsKey("database"); // => true
+config.ContainsKey("does_not_exist"); // => false
+```

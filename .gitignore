@@ -21,3 +21,4 @@ TestResult.xml
 Gemfile.lock
 .bundle
 *.gem
+.ruby-version

@@ -13,6 +13,7 @@ In Ruby, the `Centroid::Config` class exposes the following:
 + Static `from_file` class method
 + Initializer
 + `for_environment` instance method
++ `has_key?` instance method
 
 > *Note:* The examples given in the following sections are based on the JSON configuration file examples in the [Centroid document] (../README.md#examples). 
 
@@ -50,4 +51,15 @@ With the following example, Centroid will merge the configuration for *prod* wit
 config = Centroid::Config.from_file("config.json").for_environment("prod")
 server = config.some_resource.server # => "resource-prod.local"
 solution_path = config.keys.ssh # => "path/to/id_rsa.pub"
+```
+
+### has_key? Instance Method
+
+In a `Config` instance, you can use the `has_key?` method to determine if a key exists. `has_key?` is also aliased as `include?`. These methods use the same case and underscore rules as is used for value lookups.
+
+```rb
+json = '{ "database": { "serverAddress": "my-server.local" } }'
+config = Centroid::Config(json)
+config.has_key?(:database) # => true
+config.include?("DoesNotExist") # => false
 ```

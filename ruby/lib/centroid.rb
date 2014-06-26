@@ -17,10 +17,14 @@ module Centroid
       self[attrib]
     end
 
-    def [](key)
-      value = find_value(key, raw_config)
+    def respond_to_missing?(method_name, include_all)
+      has_key?(method_name)
+    end
 
-      raise KeyError.new("Centroid::Config instance does not contain key: #{key}") if value.nil?
+    def [](key)
+      raise KeyError.new("Centroid::Config instance does not contain key: #{key}") unless has_key?(key)
+
+      value = find_value(key)
 
       if value.is_a?(Hash)
         Config.new(value)
@@ -29,13 +33,19 @@ module Centroid
       end
     end
 
+    def has_key?(key)
+      !!actual_key(key)
+    end
+
+    alias_method :include?, :has_key?
+
     def to_s
       JSON.dump(raw_config)
     end
 
     def for_environment(env)
       env_json = raw_config[env]
-      all_key = actual_key("all", raw_config)
+      all_key = actual_key("all")
       if all_key.nil?
         Config.new(env_json)
       else
@@ -55,12 +65,12 @@ module Centroid
       unnormalised_key.to_s.gsub("_", "").downcase
     end
 
-    def find_value(key, hashtable)
-      hashtable[actual_key(key, hashtable)]
+    def find_value(key)
+      raw_config[actual_key(key)]
     end
 
-    def actual_key(key, hashtable)
-      hashtable.keys.find { |k| normalize_key(key) == normalize_key(k) }
+    def actual_key(key)
+      raw_config.keys.find { |k| normalize_key(key) == normalize_key(k) }
     end
 
     def validate_unique_keys!

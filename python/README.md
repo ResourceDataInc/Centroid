@@ -15,6 +15,7 @@ In Python, the `centroid.Config` class exposes the following:
 + Static `from_file` method
 + Constructor
 + `for_environment` instance method
++ `__contains__` instance method
 
 > *Note:* The examples given in the following sections are based on the JSON configuration file examples in the [Centroid doucment] (../README.md#examples). 
 
@@ -52,4 +53,15 @@ With the following example, Centroid will merge the configuration for *prod* wit
 config = Config.from_file("config.json").for_environment("prod")
 server = config.some_resource.server # => "resource-prod.local"
 solution_path = config.keys.ssh # => "path/to/id_rsa.pub"
+```
+
+### \_\_contains\_\_ Instance Method
+
+In a `Config` instance, the `__contains__` method allows for determining if a key exists, by using the `in` and `not in` operators. This method uses the same case and underscore rules as is used for value lookups.
+
+```py
+json = '{ "database": { "serverAddress": "my-server.local" } }'
+config = Config(json)
+"Database" in config # => True
+"does_not_exist" in config # => False
 ```
