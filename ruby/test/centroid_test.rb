@@ -84,4 +84,11 @@ class ConfigTests < Test::Unit::TestCase
     config = config.for_environment("Prod")
     assert_equal(config.shared, "production!")
   end
+
+  def test_supports_deep_merge
+    config = Centroid::Config.new('{"Prod": {"Database": {"Server": "prod-sql"}}, "All": {"Database": {"MigrationsPath": "path/to/migrations"}}}')
+    config = config.for_environment("Prod")
+    assert_equal(config.database.server, "prod-sql")
+    assert_equal(config.database.migrations_path, "path/to/migrations")
+  end
 end
