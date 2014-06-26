@@ -142,7 +142,7 @@ namespace Centroid.Tests
             }
             Assert.That(itemCount, Is.EqualTo(1));
         }
-
+            
         [Test]
         public void test_all_environment_is_not_case_sensitive()
         {
@@ -153,6 +153,28 @@ namespace Centroid.Tests
             var lowerCaseAllConfig = new Config(@"{""Prod"": {""Shared"": ""production!""}, ""all"": {""Shared"": ""none"", ""AllOnly"": ""works""}}");
             var lowerCaseAllEnvironmentConfig = lowerCaseAllConfig.ForEnvironment("Prod");
             Assert.That(lowerCaseAllEnvironmentConfig.AllOnly, Is.EqualTo("works"));
+        }
+
+        [Test]
+        public void supports_deep_merge()
+        {
+            const string json = @"
+                {
+                    ""Dev"": {
+                        ""Database"": {
+                            ""Server"": ""the-dev-database""
+                        }
+                    },
+                    ""All"": {
+                        ""Database"": {
+                            ""MigrationsPath"": ""path/to/migrations""
+                        }
+                    }
+                }";
+
+            dynamic config = new Config(json).ForEnvironment("Dev");
+            Assert.That(config.Database.Server, Is.EqualTo("the-dev-database"));
+            Assert.That(config.Database.MigrationsPath, Is.EqualTo("path/to/migrations"));
         }
     }
 }

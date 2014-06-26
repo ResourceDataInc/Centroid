@@ -40,7 +40,7 @@ module Centroid
         Config.new(env_json)
       else
         all_json = raw_config[all_key]
-        Config.new(all_json.merge(env_json))
+        Config.new(deep_merge(all_json, env_json))
       end
     end
 
@@ -71,6 +71,21 @@ module Centroid
 
       keys = dups.values.flat_map { |d| d.map { |e| e[:key] } }
       raise KeyError, "Centroid::Config instance contains duplicate keys: #{keys.join(', ')}"
+    end
+
+    def deep_merge(left, right)
+      return right if not right.is_a?(Hash)
+
+      right.each_pair do |k, rv|
+        lv = left[k]
+        left[k] = if lv.is_a?(Hash) && rv.is_a?(Hash)
+          deep_merge(lv, rv)
+        else
+          rv
+        end
+      end
+
+      left
     end
   end
 end

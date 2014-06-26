@@ -47,9 +47,8 @@ class Config:
             return Config(env_json)
 
         all_json = _get_value(actual_key, self.raw_config)
-        all_json.update(env_json);
 
-        return Config(all_json)
+        return Config(_dict_merge(all_json, env_json))
 
     @staticmethod
     def from_file(filename):
@@ -75,3 +74,13 @@ def _get_actual_key(key, hashtable):
     if len(result) > 0:
         return result[0]
     return None
+
+def _dict_merge(left, right):
+    if not isinstance(right, dict):
+        return right
+    for k, v in right.iteritems():
+        if k in left and isinstance(left[k], dict):
+            left[k] = _dict_merge(left[k], v)
+        else:
+            left[k] = v
+    return left
