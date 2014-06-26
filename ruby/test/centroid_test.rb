@@ -84,4 +84,14 @@ class ConfigTests < Test::Unit::TestCase
     config = config.for_environment("Prod")
     assert_equal(config.shared, "production!")
   end
+
+  def test_all_environment_is_not_case_sensitive
+    config = Centroid::Config.new('{"Prod": {"Shared": "production!"}, "All": {"Shared": "none", "AllOnly": "works"}}')
+    config = config.for_environment("Prod")
+    assert_equal(config.all_only, "works")
+
+    config = Centroid::Config.new('{"Prod": {"Shared": "production!"}, "all": {"Shared": "none", "AllOnly": "works"}}')
+    config = config.for_environment("Prod")
+    assert_equal(config.all_only, "works")
+  end
 end

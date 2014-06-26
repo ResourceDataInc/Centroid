@@ -37,8 +37,8 @@ namespace Centroid
 
         public dynamic ForEnvironment(string environment)
         {
-            var envConfig = RawConfig[environment];
-            var allConfig = RawConfig.All;
+            var envConfig = GetContainer(environment);
+            var allConfig = GetContainer("all");
 
             if (allConfig == null)
             {
@@ -123,14 +123,19 @@ namespace Centroid
 
         dynamic GetValue(string key)
         {
-            var actualKey = GetActualKey(key);
-            var container = RawConfig[actualKey];
+            var container = GetContainer(key);
             return GetValueFromContainer(container);
+        }
+
+        dynamic GetContainer(string key)
+        {
+            var actualKey = GetActualKey(key);
+            return actualKey == null ? null : RawConfig[actualKey];
         }
 
         string GetActualKey(string key)
         {
-            return GetDynamicMemberNames().Single(m => NormaliseKey(m) == NormaliseKey(key));
+            return GetDynamicMemberNames().SingleOrDefault(m => NormaliseKey(m) == NormaliseKey(key));
         }
 
         void ValidateUniqueKeys()

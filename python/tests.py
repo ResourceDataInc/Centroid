@@ -88,3 +88,12 @@ class ConfigTest(unittest.TestCase):
         for item in config:
             itemCount += 1
         self.assertEqual(itemCount, 1)
+
+    def test_all_environment_is_not_case_sensitive(self):
+        config = Config('{"Prod": {"Shared": "production!"}, "All": {"Shared": "none", "AllOnly": "works"}}')
+        config = config.for_environment("Prod")
+        self.assertEqual(config.all_only, "works")
+
+        config = Config('{"Prod": {"Shared": "production!"}, "all": {"Shared": "none", "AllOnly": "works"}}')
+        config = config.for_environment("Prod")
+        self.assertEqual(config.all_only, "works")
