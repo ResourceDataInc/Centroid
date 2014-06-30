@@ -7,9 +7,6 @@ build :build do |cmd|
 end
 
 namespace :package do
-  desc "Package All"
-  task :all => ["package:cs", "package:py", "package:rb"]
-
   directory "dot-net/build/pkg"
   desc "Package .NET"
   nugets_pack :cs => ["dot-net/build/pkg", :test] do |cmd|
@@ -22,7 +19,7 @@ namespace :package do
       m.summary = "A centralized paradigm to configuration management."
       m.description = "Centroid is a tool for loading configuration values declared in JSON, and accessing those configuration values using object properties."
       m.authors = "Resource Data, Inc."
-      m.version = "1.0.1"
+      m.version = "1.1.0-alpha1"
       m.license_url = "https://github.com/ResourceDataInc/Centroid/blob/master/LICENSE.txt"
       m.project_url = "https://github.com/ResourceDataInc/Centroid"
     end
@@ -40,10 +37,10 @@ namespace :package do
   end
 end
 
-namespace :release do
-  desc "Release All"
-  task :all => ["release:cs", "release:py", "release:rb"]
+desc "Package everything"
+task :package => ["package:cs", "package:py", "package:rb"]
 
+namespace :release do
   desc "Release .NET package"
   task :cs  => ["package:cs"] do
     Dir.glob("dot-net/build/pkg/*.nupkg") do |f|
@@ -63,6 +60,9 @@ namespace :release do
     end
   end
 end
+
+desc "Release everything"
+task :release => ["release:cs", "release:py", "release:rb"]
 
 namespace :test do
   desc "Test .NET"
