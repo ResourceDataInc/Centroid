@@ -93,7 +93,21 @@ namespace Centroid
 
         public IEnumerator GetEnumerator()
         {
-            return RawConfig.GetEnumerator();
+            if (RawConfig is JArray)
+            {
+                foreach (var element in RawConfig)
+                {
+                    yield return GetValueFromContainer(element);
+                }
+            }
+            else
+            {
+                foreach (var name in GetDynamicMemberNames())
+                {
+                    dynamic value = GetValue(name);
+                    yield return value;
+                }
+            }
         }
 
         public override IEnumerable<string> GetDynamicMemberNames()

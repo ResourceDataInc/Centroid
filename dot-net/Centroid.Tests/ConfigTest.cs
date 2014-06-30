@@ -126,8 +126,8 @@ namespace Centroid.Tests
             var itemCount = 0;
             foreach (var item in config.TheArray)
             {
+                Assert.That(item.TheKey, Is.EqualTo(config.TheArray[itemCount].TheKey));
                 itemCount++;
-                Assert.That(item.TheKey, Is.EqualTo(config.TheArray[itemCount -1].TheKey));
             }
         }
 
@@ -141,6 +141,28 @@ namespace Centroid.Tests
                 itemCount++;
             }
             Assert.That(itemCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void test_enumerated_json_object_values_are_still_shiny()
+        {
+            const string json = @"
+                {
+                    ""connections"": {
+                        ""firstConnection"": {
+                            ""user"": ""firstUser"",
+                            ""password"":""secret""
+                        },
+                        ""secondConnection"": {
+                            ""user"": ""secondUser"",
+                            ""password"":""secret""
+                        },
+                    }
+                }";
+            dynamic config = new Config(json);
+            foreach (dynamic connection in config.Connections) {
+                Assert.That(connection.Password, Is.EqualTo("secret")); 
+            }
         }
 
         [Test]
@@ -181,7 +203,7 @@ namespace Centroid.Tests
         public void test_contains_key()
         {
             dynamic config = new Config(JsonConfig);
-            Assert.That(config.ContainsKey("Environment"), Is.True);
+            Assert.That(config.ContainsKey("theEnvironment"), Is.True);
             Assert.That(config.ContainsKey("DoesNotExist"), Is.False);
         }
     }
