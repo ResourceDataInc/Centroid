@@ -104,13 +104,13 @@ class ConfigTests < Test::Unit::TestCase
 
   def test_has_key
     config = Centroid::Config.new(json_config)
-    assert(config.has_key?("environment"))
+    assert(config.has_key?("the_environment"))
     assert(!config.has_key?("does_not_exist"))
   end
 
   def test_respond_to
     config = Centroid::Config.new(json_config)
-    assert(config.respond_to?(:environment))
+    assert(config.respond_to?(:the_environment))
     assert(!config.respond_to?(:does_not_exist))
   end
 
@@ -118,8 +118,29 @@ class ConfigTests < Test::Unit::TestCase
     config = Centroid::Config.new(json_config)
     itemCount = 0
     config.each do |item|
-        itemCount += 1
+      itemCount += 1
     end
     assert_equal(itemCount, 1)
+  end
+
+  def test_enumerated_json_object_values_are_still_shiny
+      json = '
+        {
+          "connections": {
+            "firstConnection": {
+              "user": "firstUser",
+              "password":"secret"
+            },
+            "secondConnection": {
+              "user": "secondUser",
+              "password":"secret"
+            }
+          }
+        }'
+
+      config = Centroid::Config.new(json)
+      config.connections.each do |k, v|
+        assert_equal(v.password, "secret")
+      end
   end
 end
