@@ -105,7 +105,7 @@ namespace Centroid
                 foreach (var name in GetDynamicMemberNames())
                 {
                     dynamic value = GetValue(name);
-                    yield return value;
+                    yield return new KeyValuePair<string,dynamic>(name, value);
                 }
             }
         }

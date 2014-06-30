@@ -160,8 +160,9 @@ namespace Centroid.Tests
                     }
                 }";
             dynamic config = new Config(json);
-            foreach (dynamic connection in config.Connections) {
-                Assert.That(connection.Password, Is.EqualTo("secret")); 
+            foreach (var kvp in config.Connections) 
+            {
+                Assert.That(kvp.Value.Password, Is.EqualTo("secret")); 
             }
         }
 
