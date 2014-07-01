@@ -89,6 +89,25 @@ class ConfigTest(unittest.TestCase):
             itemCount += 1
         self.assertEqual(itemCount, 1)
 
+    def test_enumerated_json_object_values_are_still_shiny(self):
+      json = """
+        {
+          "connections": {
+            "firstConnection": {
+              "user": "firstUser",
+              "password":"secret"
+            },
+            "secondConnection": {
+              "user": "secondUser",
+              "password":"secret"
+            }
+          }
+        }"""
+
+      config = Config(json)
+      for k, v in config.connections:
+        self.assertEqual(v.password, "secret")
+
     def test_all_environment_is_not_case_sensitive(self):
         config = Config('{"Prod": {"Shared": "production!"}, "All": {"Shared": "none", "AllOnly": "works"}}')
         config = config.for_environment("Prod")

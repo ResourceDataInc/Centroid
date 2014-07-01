@@ -20,7 +20,19 @@ class Config:
         return value
 
     def __iter__(self):
-        return self.raw_config.__iter__()
+        if type(self.raw_config) is dict:
+            for key, value in self.raw_config.iteritems():
+                if type(value) is dict:
+                    yield key, Config(value)
+                else:
+                    yield key, value
+
+        else:
+            for value in self.raw_config:
+                if type(value) is dict:
+                    yield Config(value)
+                else:
+                    yield value
 
     # to string
     def __str__(self):
