@@ -11,6 +11,7 @@
 
 * Fix issue opening project in Xamarin Studio - [#49](https://github.com/ResourceDataInc/Centroid/pull/49)
 * Fix issue with lowercase `all` environment not being picked up - [#54](https://github.com/ResourceDataInc/Centroid/pull/54)
+* Fix issue with enumerating over config values causing values to become non-Centroidy - [#60](https://github.com/ResourceDataInc/Centroid/pull/60)
 
 ## Python
 
