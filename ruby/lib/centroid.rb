@@ -24,21 +24,11 @@ module Centroid
     def each
       return enum_for :each unless block_given?
 
-      if raw_config.is_a?(Hash)
-        raw_config.each do |key, value|
-          if value.is_a?(Hash)
-            yield key, Config.new(value)
-          else
-            yield key, value
-          end
-        end
-      else
-        raw_config.each do |value|
-          if value.is_a?(Hash)
-            yield Config.new(value)
-          else
-            yield value
-          end
+      raw_config.each do |key, value|
+        if value.is_a?(Hash)
+          yield key, Config.new(value)
+        else
+          yield key, value
         end
       end
     end
