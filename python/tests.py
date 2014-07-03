@@ -6,11 +6,11 @@ class ConfigTest(unittest.TestCase):
 
     @property
     def _json_config(self):
-        return '{"Environment": {"TheKey": "TheValue"}}'
+        return '{"theEnvironment": {"theKey": "TheValue"}}'
 
     @property
     def _json_config_with_array(self):
-        return '{"Array": [{"Key": "Value1"}, {"Key": "Value2"}]}'
+        return '{"theArray": [{"theKey": "Value1"}, {"theKey": "Value2"}]}'
 
     @property
     def _shared_file_path(self):
@@ -18,7 +18,7 @@ class ConfigTest(unittest.TestCase):
 
     def test_create_from_string(self):
         config = Config(self._json_config)
-        self.assertEqual(config.Environment.TheKey, "TheValue")
+        self.assertEqual(config.the_environment.the_key, "TheValue")
 
     def test_create_from_file(self):
         config = Config.from_file(self._shared_file_path)
@@ -36,11 +36,11 @@ class ConfigTest(unittest.TestCase):
 
     def test_readable_using_snake_case_property(self):
         config = Config(self._json_config)
-        self.assertEqual(config.environment.the_key, "TheValue")
+        self.assertEqual(config.the_environment.the_key, "TheValue")
 
     def test_environment_specific_config_is_included(self):
         config = Config(self._json_config)
-        environment_config = config.for_environment("Environment")
+        environment_config = config.for_environment("theEnvironment")
         self.assertEqual(environment_config.the_key, "TheValue")
 
     def test_shared_config_is_included(self):
@@ -62,8 +62,8 @@ class ConfigTest(unittest.TestCase):
 
     def test_modifying_raw_config(self):
         config = Config(self._json_config)
-        config.raw_config["Environment"]["TheKey"] = "NotTheValue"
-        self.assertEqual(config.environment.the_key, "NotTheValue")
+        config.raw_config["theEnvironment"]["theKey"] = "NotTheValue"
+        self.assertEqual(config.the_environment.the_key, "NotTheValue")
 
     def test_environment_specific_config_overrides_all(self):
         config = Config('{"Prod": {"Shared": "production!"}, "All": {"Shared": "none"}}')
@@ -72,22 +72,41 @@ class ConfigTest(unittest.TestCase):
 
     def test_indexing_json_array(self):
         config = Config(self._json_config_with_array)
-        self.assertEqual(config.array[0].key, "Value1")
-        self.assertEqual(config.array[1].key, "Value2")
+        self.assertEqual(config.the_array[0].the_key, "Value1")
+        self.assertEqual(config.the_array[1].the_key, "Value2")
 
     def test_enumerating_json_array(self):
         config = Config(self._json_config_with_array)
-        itemCount = 0;
-        for item in config.array:
+        itemCount = 0
+        for item in config.the_array:
             itemCount += 1
         self.assertEqual(itemCount, 2)
 
     def test_enumerating_json_object(self):
         config = Config(self._json_config)
-        itemCount = 0;
+        itemCount = 0
         for item in config:
             itemCount += 1
         self.assertEqual(itemCount, 1)
+
+    def test_enumerated_json_object_values_are_still_shiny(self):
+      json = """
+        {
+          "connections": {
+            "firstConnection": {
+              "user": "firstUser",
+              "password":"secret"
+            },
+            "secondConnection": {
+              "user": "secondUser",
+              "password":"secret"
+            }
+          }
+        }"""
+
+      config = Config(json)
+      for k, v in config.connections:
+        self.assertEqual(v.password, "secret")
 
     def test_all_environment_is_not_case_sensitive(self):
         config = Config('{"Prod": {"Shared": "production!"}, "All": {"Shared": "none", "AllOnly": "works"}}')
@@ -106,5 +125,5 @@ class ConfigTest(unittest.TestCase):
 
     def test_has_key(self):
         config = Config(self._json_config)
-        self.assertTrue("environment" in config)
+        self.assertTrue("the_environment" in config)
         self.assertTrue("does_not_exist" not in config)

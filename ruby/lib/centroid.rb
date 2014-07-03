@@ -21,6 +21,18 @@ module Centroid
       has_key?(method_name)
     end
 
+    def each
+      return enum_for :each unless block_given?
+
+      raw_config.each do |key, value|
+        if value.is_a?(Hash)
+          yield key, Config.new(value)
+        else
+          yield key, value
+        end
+      end
+    end
+
     def [](key)
       raise KeyError.new("Centroid::Config instance does not contain key: #{key}") unless has_key?(key)
 

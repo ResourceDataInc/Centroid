@@ -4,7 +4,7 @@ require "json"
 
 class ConfigTests < Test::Unit::TestCase
   def json_config
-    '{"Environment":{"TheKey":"TheValue"}}'
+    '{"theEnvironment":{"theKey":"TheValue"}}'
   end
 
   def shared_file_path
@@ -13,7 +13,7 @@ class ConfigTests < Test::Unit::TestCase
 
   def test_create_from_string
     config = Centroid::Config.new(json_config)
-    assert_equal(config.environment.the_key, "TheValue")
+    assert_equal(config.the_environment.the_key, "TheValue")
   end
 
   def test_create_from_file
@@ -46,12 +46,12 @@ class ConfigTests < Test::Unit::TestCase
 
   def test_readable_using_snake_case_property
     config = Centroid::Config.new(json_config)
-    assert_equal(config.environment.the_key, "TheValue")
+    assert_equal(config.the_environment.the_key, "TheValue")
   end
 
   def test_environment_specific_config_is_included
     config = Centroid::Config.new(json_config)
-    environment_config = config.for_environment("Environment")
+    environment_config = config.for_environment("theEnvironment")
     assert_equal(environment_config.the_key, "TheValue")
   end
 
@@ -75,8 +75,8 @@ class ConfigTests < Test::Unit::TestCase
 
   def test_modifying_raw_config
     config = Centroid::Config.new(json_config)
-    config.raw_config["Environment"]["TheKey"] = "NotTheValue"
-    assert_equal(config.environment.the_key, "NotTheValue")
+    config.raw_config["theEnvironment"]["theKey"] = "NotTheValue"
+    assert_equal(config.the_environment.the_key, "NotTheValue")
   end
 
   def test_environment_specific_config_overrides_all
@@ -104,13 +104,43 @@ class ConfigTests < Test::Unit::TestCase
 
   def test_has_key
     config = Centroid::Config.new(json_config)
-    assert(config.has_key?("environment"))
+    assert(config.has_key?("the_environment"))
     assert(!config.has_key?("does_not_exist"))
   end
 
   def test_respond_to
     config = Centroid::Config.new(json_config)
-    assert(config.respond_to?(:environment))
+    assert(config.respond_to?(:the_environment))
     assert(!config.respond_to?(:does_not_exist))
+  end
+
+  def test_enumerating_json_object
+    config = Centroid::Config.new(json_config)
+    itemCount = 0
+    config.each do |item|
+      itemCount += 1
+    end
+    assert_equal(itemCount, 1)
+  end
+
+  def test_enumerated_json_object_values_are_still_shiny
+      json = '
+        {
+          "connections": {
+            "firstConnection": {
+              "user": "firstUser",
+              "password":"secret"
+            },
+            "secondConnection": {
+              "user": "secondUser",
+              "password":"secret"
+            }
+          }
+        }'
+
+      config = Centroid::Config.new(json)
+      config.connections.each do |k, v|
+        assert_equal(v.password, "secret")
+      end
   end
 end
