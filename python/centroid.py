@@ -53,6 +53,7 @@ class Config:
 
     def for_environment(self, env):
         env_json = self.raw_config[env]
+        env_json["environment"] = env
 
         actual_key = _get_actual_key('all', self.raw_config)
         if actual_key is None:

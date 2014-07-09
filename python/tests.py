@@ -38,6 +38,11 @@ class ConfigTest(unittest.TestCase):
         config = Config(self._json_config)
         self.assertEqual(config.the_environment.the_key, "TheValue")
 
+    def test_environment_property_is_included(self):
+        config = Config(self._json_config)
+        environment_config = config.for_environment("theEnvironment")
+        self.assertEqual(environment_config.environment, "theEnvironment")
+
     def test_environment_specific_config_is_included(self):
         config = Config(self._json_config)
         environment_config = config.for_environment("theEnvironment")
