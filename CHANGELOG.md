@@ -4,6 +4,7 @@
 
 ### Features
 
+* Add `environment` property to config created with `ForEnvironment` - [#63](https://github.com/ResourceDataInc/Centroid/pull/63)
 * Deep merge support - [#56](https://github.com/ResourceDataInc/Centroid/pull/56)
 * Add `ContainsKey` method - [#50](https://github.com/ResourceDataInc/Centroid/pull/50)
 
@@ -17,6 +18,7 @@
 
 ### Features
 
+* Add `environment` property to config created with `for_environment` - [#63](https://github.com/ResourceDataInc/Centroid/pull/63)
 * Deep merge support - [#56](https://github.com/ResourceDataInc/Centroid/pull/56)
 * Add `__contains__` support - [#50](https://github.com/ResourceDataInc/Centroid/pull/50)
 
@@ -28,6 +30,7 @@
 
 ### Features
 
+* Add `environment` property to config created with `for_environment` - [#63](https://github.com/ResourceDataInc/Centroid/pull/63)
 * Deep merge support - [#56](https://github.com/ResourceDataInc/Centroid/pull/56)
 * Add `has_key?` method - [#50](https://github.com/ResourceDataInc/Centroid/pull/50)
 
