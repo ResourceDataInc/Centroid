@@ -57,6 +57,7 @@ module Centroid
 
     def for_environment(env)
       env_json = raw_config[env]
+      env_json["environment"] = env
       all_key = actual_key("all")
       if all_key.nil?
         Config.new(env_json)

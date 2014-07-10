@@ -43,6 +43,7 @@ namespace Centroid
         public dynamic ForEnvironment(string environment)
         {
             var envConfig = GetContainer(environment);
+            envConfig["environment"] = environment;
             var allConfig = GetContainer("all");
 
             if (allConfig == null)

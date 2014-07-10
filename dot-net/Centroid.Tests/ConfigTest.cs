@@ -60,6 +60,14 @@ namespace Centroid.Tests
         }
 
         [Test]
+        public void test_environment_property_is_included()
+        {
+            var config = new Config(JsonConfig);
+            dynamic environmentConfig = config.ForEnvironment("theEnvironment");
+            Assert.That(environmentConfig.environment, Is.EqualTo("theEnvironment"));
+        }
+
+        [Test]
         public void test_environment_specific_config_is_included()
         {
             var config = new Config(JsonConfig);
