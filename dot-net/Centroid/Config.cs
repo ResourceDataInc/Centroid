@@ -12,7 +12,7 @@ namespace Centroid
     {
         public Config(string json)
         {
-            RawConfig = JObject.Parse(json);
+            RawConfig = JsonConvert.DeserializeObject<ExpandoObject>(json);
             ValidateUniqueKeys();
         }
 
@@ -112,8 +112,8 @@ namespace Centroid
 
         public override IEnumerable<string> GetDynamicMemberNames()
         {
-            var container = (JObject) RawConfig;
-            return container.Properties().Select(p => p.Name);
+            var container = (IDictionary<String, Object>) RawConfig;
+            return container.Keys;
         }
 
         static string NormaliseKey(string key)
@@ -123,11 +123,11 @@ namespace Centroid
 
         static dynamic GetValueFromContainer(dynamic container)
         {
-            if (container is JContainer)
+            if (container is ExpandoObject)
             {
                 return new Config(container);
             }
-            return container.Value;
+            return container;
         }
 
         dynamic GetValue(int index)
@@ -145,7 +145,7 @@ namespace Centroid
         dynamic GetContainer(string key)
         {
             var actualKey = GetActualKey(key);
-            return actualKey == null ? null : RawConfig[actualKey];
+            return actualKey == null ? null : ((IDictionary<string, object>) RawConfig)[actualKey];
         }
 
         string GetActualKey(string key)
