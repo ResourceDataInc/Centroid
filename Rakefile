@@ -19,7 +19,7 @@ namespace :package do
       m.summary = "A centralized paradigm to configuration management."
       m.description = "Centroid is a tool for loading configuration values declared in JSON, and accessing those configuration values using object properties."
       m.authors = "Resource Data, Inc."
-      m.version = "1.1.0-alpha2"
+      m.version = "1.1.0-alpha3"
       m.license_url = "https://github.com/ResourceDataInc/Centroid/blob/master/LICENSE.txt"
       m.project_url = "https://github.com/ResourceDataInc/Centroid"
     end
