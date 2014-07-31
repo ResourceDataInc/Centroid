@@ -40,6 +40,8 @@ module Centroid
 
       if value.is_a?(Hash)
         Config.new(value)
+      elsif value.is_a?(Array)
+        value.map { |e| e.is_a?(Hash) ? Config.new(e) : e }
       else
         value
       end
