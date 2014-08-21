@@ -37,6 +37,7 @@
 ### Fixes
 
 * Fix issue with enumerating over config values causing values to become non-Centroidy - [#61](https://github.com/ResourceDataInc/Centroid/pull/61)
+* Fix issue with enumerating arrays causing values to become non-Centroidy - [#53](https://github.com/ResourceDataInc/Centroid/pull/53)
 
 # 1.0.0 - 2014/02/20
 
