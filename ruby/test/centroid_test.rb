@@ -7,6 +7,10 @@ class ConfigTests < Test::Unit::TestCase
     '{"theEnvironment":{"theKey":"TheValue"}}'
   end
 
+  def json_config_with_array
+    '{"theArray":[{"theKey": "Value1"},{"theKey": "Value2"}]}'
+  end
+
   def shared_file_path
     'config.json'
   end
@@ -118,6 +122,22 @@ class ConfigTests < Test::Unit::TestCase
     config = Centroid::Config.new(json_config)
     assert(config.respond_to?(:the_environment))
     assert(!config.respond_to?(:does_not_exist))
+  end
+
+  def test_indexing_json_array
+    config = Centroid::Config.new(json_config_with_array)
+    assert_equal(config.the_array[0].the_key, "Value1")
+    assert_equal(config.the_array[1].the_key, "Value2")
+  end
+
+  def test_enumerating_json_array
+    config = Centroid::Config.new(json_config_with_array)
+    itemCount = 0
+    config.the_array.each do |item|
+      assert_equal(item.the_key, config.the_array[itemCount].the_key)
+      itemCount += 1
+    end
+    assert_equal(itemCount, 2)
   end
 
   def test_enumerating_json_object
