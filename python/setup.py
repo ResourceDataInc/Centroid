@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(name = 'centroid',
-      version = '1.1.0-alpha3',
+      version = '1.1.0',
       description = 'A centralized paradigm to configuration management.',
       long_description = 'Centroid is a tool for loading configuration values declared in JSON, and accessing those configuration values using object properties.',
       author = 'Resource Data, Inc',
