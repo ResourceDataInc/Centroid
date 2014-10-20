@@ -34,7 +34,7 @@ To load a string instead of a file, create an instance of `Config` by passing a 
 ```rb
 # from_string.rb
 json = '{ "database": { "serverAddress": "my-server.local" } }'
-config = Centroid::Config(json)
+config = Centroid::Config.new(json)
 server = config.database.server_address # => "my-server.local"
 ```
 
@@ -59,7 +59,7 @@ In a `Config` instance, you can use the `has_key?` method to determine if a key 
 
 ```rb
 json = '{ "database": { "serverAddress": "my-server.local" } }'
-config = Centroid::Config(json)
+config = Centroid::Config.new(json)
 config.has_key?(:database) # => true
 config.include?("DoesNotExist") # => false
 ```
