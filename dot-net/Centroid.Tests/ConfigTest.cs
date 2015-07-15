@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp.RuntimeBinder;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace Centroid.Tests
 {
@@ -214,6 +215,55 @@ namespace Centroid.Tests
             dynamic config = new Config(JsonConfig);
             Assert.That(config.ContainsKey("theEnvironment"), Is.True);
             Assert.That(config.ContainsKey("DoesNotExist"), Is.False);
+        }
+
+        [Test]
+        public void test_casts_to_complex_type()
+        {
+            const string json = @"
+                {
+                    ""castingObject"": {
+                        ""castingString"": ""true"",
+                        ""castingBoolean"": true,
+                        ""castingInteger"": 42
+                    }
+                }";
+
+            dynamic config = new Config(json);
+            CastingObject castingObject = config.castingObject;
+            Assert.That(castingObject, Is.InstanceOf<CastingObject>());
+        }
+
+        class CastingObject
+        {
+            public string CastingString { get; set; }
+            public bool CastingBoolean { get; set; }
+            public int CastingInteger { get; set; }
+        }
+
+        [Test]
+        public void test_casts_array_of_object_to_complex_type()
+        {
+            const string json = @"
+                {
+                    ""castingObjects"": [
+                        {
+                            ""castingString"": ""true"",
+                            ""castingBoolean"": true,
+                            ""castingInteger"": 42
+                        },
+                        {
+                            ""castingString"": ""clue"",
+                            ""castingBoolean"": false,
+                            ""castingInteger"": 84
+                        },
+                    ]
+                }";
+
+            dynamic config = new Config(json);
+            List<CastingObject> castingObjects = config.castingObjects;
+            Assert.That(castingObjects, Is.InstanceOf<List<CastingObject>>());
+            Assert.That(castingObjects.Count, Is.EqualTo(2));
         }
     }
 }

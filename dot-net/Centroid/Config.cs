@@ -78,7 +78,8 @@ namespace Centroid
 
             try
             {
-                result = Convert.ChangeType(RawConfig, binder.Type);
+                JToken rawConfig = RawConfig;
+                result = rawConfig.ToObject(binder.Type);
                 return true;
             }
             catch (InvalidCastException)
