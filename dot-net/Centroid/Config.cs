@@ -83,15 +83,13 @@ namespace Centroid
                 //ensure at least one property in the config bound to the type
                 var JResult = JToken.FromObject(result);
                 bool hasBoundProperty =
-                    JResult.Any(property =>
+                    JResult.Cast<JProperty>().Any(property =>
                     {
-                        var _property = (JProperty)property;
-                        return rawConfig.Any(rawProperty =>
+                        return rawConfig.Cast<JProperty>().Any(rawProperty =>
                         {
-                            var _rawProperty = (JProperty)rawProperty;
                             return
-                                NormaliseKey(_rawProperty.Name).Equals(NormaliseKey(_property.Name))
-                                    && _rawProperty.Value.Equals(_property.Value);
+                                NormaliseKey(rawProperty.Name).Equals(NormaliseKey(property.Name))
+                                    && rawProperty.Value.Equals(property.Value);
                         });
                     });
                 if (!hasBoundProperty) throw new InvalidCastException();
