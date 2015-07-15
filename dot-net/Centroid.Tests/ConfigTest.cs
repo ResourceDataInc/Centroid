@@ -215,5 +215,48 @@ namespace Centroid.Tests
             Assert.That(config.ContainsKey("theEnvironment"), Is.True);
             Assert.That(config.ContainsKey("DoesNotExist"), Is.False);
         }
+
+        [Test]
+        public void test_casts_to_complex_type()
+        {
+            const string json = @"
+                {
+                    ""castingObject"": {
+                        ""castingString"": ""true"",
+                        ""castingBoolean"": true,
+                        ""castingInteger"": 42
+                    }
+                }";
+
+            dynamic config = new Config(json);
+            CastingObject castingObject = config.castingObject;
+            Assert.That(castingObject, Is.InstanceOf<CastingObject>());
+        }
+
+        class CastingObject
+        {
+            public string CastingString { get; set; }
+            public bool CastingBoolean { get; set; }
+            public int CastingInteger { get; set; }
+        }
+
+        [Test]
+        public void test_cast_fails_to_incompatible_complex_type()
+        {
+            const string json = @"
+                {
+                    ""castingObject"": {
+                        ""caster"": ""true"",
+                        ""daster"": 99.99,
+                        ""faster"": false
+                    }
+                }";
+
+            dynamic config = new Config(json);
+            Assert.Throws<RuntimeBinderException>(() =>
+            {
+                CastingObject castingObject = config.castingObject;
+            });
+        }
     }
 }
