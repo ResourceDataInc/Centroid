@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp.RuntimeBinder;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace Centroid.Tests
 {
@@ -241,22 +242,28 @@ namespace Centroid.Tests
         }
 
         [Test]
-        public void test_cast_fails_to_incompatible_complex_type()
+        public void test_casts_array_of_object_to_complex_type()
         {
             const string json = @"
                 {
-                    ""castingObject"": {
-                        ""caster"": ""true"",
-                        ""daster"": 99.99,
-                        ""faster"": false
-                    }
+                    ""castingObjects"": [
+                        {
+                            ""castingString"": ""true"",
+                            ""castingBoolean"": true,
+                            ""castingInteger"": 42
+                        },
+                        {
+                            ""castingString"": ""clue"",
+                            ""castingBoolean"": false,
+                            ""castingInteger"": 84
+                        },
+                    ]
                 }";
 
             dynamic config = new Config(json);
-            Assert.Throws<RuntimeBinderException>(() =>
-            {
-                CastingObject castingObject = config.castingObject;
-            });
+            List<CastingObject> castingObjects = config.castingObjects;
+            Assert.That(castingObjects, Is.InstanceOf<List<CastingObject>>());
+            Assert.That(castingObjects.Count, Is.EqualTo(2));
         }
     }
 }
