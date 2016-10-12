@@ -35,6 +35,12 @@ namespace Centroid
             set { RawConfig[index] = value; }
         }
 
+        public object this[string index]
+        {
+            get { return GetValue(index); }
+            set { RawConfig[index] = value; }
+        }
+
         public bool ContainsKey(string key)
         {
             return GetActualKey(key) != null;

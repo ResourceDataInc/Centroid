@@ -215,5 +215,13 @@ namespace Centroid.Tests
             Assert.That(config.ContainsKey("theEnvironment"), Is.True);
             Assert.That(config.ContainsKey("DoesNotExist"), Is.False);
         }
+
+        [Test]
+        public void test_key_as_index()
+        {
+            dynamic config = new Config(JsonConfig);
+            var myString = "thekey";
+            Assert.That(config.theEnvironment[myString], Is.EqualTo("TheValue"));
+        }
     }
 }
