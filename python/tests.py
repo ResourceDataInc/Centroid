@@ -128,6 +128,39 @@ class ConfigTest(unittest.TestCase):
         self.assertEqual(config.database.server, "prod-sql")
         self.assertEqual(config.database.migrations_path, "path/to/migrations")
 
+    def test_supports_merge_override(self):
+        json = """
+        {
+            "Dev": {
+                "Connection": {
+                    "server": "dev-server",
+                    "database": "dev_database",
+                    "SdeConnectionFile": "DEV:sde(file)"
+                }
+            },
+            "All": {
+                "Connection": {
+                    "server": "",
+                    "database": "",
+                    "instance": "",
+                    "user": "default-user",
+                    "password": "default-password",
+                    "version": "",
+                    "SdeConnectionFile": ""
+                }
+            }
+        }"""
+
+        config = Config(json)
+        config = config.for_environment("Dev")
+        self.assertEqual(config.Connection.Server, "dev-server")
+        self.assertEqual(config.Connection.database, "dev_database")
+        self.assertEqual(config.Connection.instance, "")
+        self.assertEqual(config.Connection.user, "default-user")
+        self.assertEqual(config.Connection.password, "default-password")
+        self.assertEqual(config.Connection.version, "")
+        self.assertEqual(config.Connection.SdeConnectionFile, "DEV:sde(file)")
+
     def test_has_key(self):
         config = Config(self._json_config)
         self.assertTrue("the_environment" in config)

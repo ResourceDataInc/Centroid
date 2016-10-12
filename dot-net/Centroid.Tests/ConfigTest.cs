@@ -187,7 +187,7 @@ namespace Centroid.Tests
         }
 
         [Test]
-        public void supports_deep_merge()
+        public void test_supports_deep_merge()
         {
             const string json = @"
                 {
@@ -206,6 +206,41 @@ namespace Centroid.Tests
             dynamic config = new Config(json).ForEnvironment("Dev");
             Assert.That(config.Database.Server, Is.EqualTo("the-dev-database"));
             Assert.That(config.Database.MigrationsPath, Is.EqualTo("path/to/migrations"));
+        }
+
+        [Test]
+        public void test_supports_merge_override()
+        {
+            const string json = @"
+                {
+                    ""Dev"": {
+                        ""Connection"": {
+                            ""server"": ""dev-server"",
+                            ""database"": ""dev_database"",
+                            ""SdeConnectionFile"": ""DEV:sde(file)""
+                        }
+                    },
+                    ""All"": {
+                        ""Connection"": {
+                            ""server"": """",
+                            ""database"": """",
+                            ""instance"": """",
+                            ""user"": ""default-user"",
+                            ""password"": ""default-password"",
+                            ""version"": """",
+                            ""SdeConnectionFile"": """"
+                        }
+                    }
+                }";
+
+            dynamic config = new Config(json).ForEnvironment("Dev");
+            Assert.That(config.Connection.Server, Is.EqualTo("dev-server"));
+            Assert.That(config.Connection.database, Is.EqualTo("dev_database"));
+            Assert.That(config.Connection.instance, Is.EqualTo(""));
+            Assert.That(config.Connection.user, Is.EqualTo("default-user"));
+            Assert.That(config.Connection.password, Is.EqualTo("default-password"));
+            Assert.That(config.Connection.version, Is.EqualTo(""));
+            Assert.That(config.Connection.SdeConnectionFile, Is.EqualTo("DEV:sde(file)"));
         }
 
         [Test]
