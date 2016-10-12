@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp.RuntimeBinder;
@@ -168,9 +168,9 @@ namespace Centroid.Tests
                     }
                 }";
             dynamic config = new Config(json);
-            foreach (var kvp in config.Connections) 
+            foreach (var kvp in config.Connections)
             {
-                Assert.That(kvp.Value.Password, Is.EqualTo("secret")); 
+                Assert.That(kvp.Value.Password, Is.EqualTo("secret"));
             }
         }
 

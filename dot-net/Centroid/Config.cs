@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -117,12 +117,12 @@ namespace Centroid
             return container.Properties().Select(p => p.Name);
         }
 
-        static string NormaliseKey(string key)
+        private static string NormaliseKey(string key)
         {
             return key.Replace("_", String.Empty).ToLower();
         }
 
-        static dynamic GetValueFromContainer(dynamic container)
+        private static dynamic GetValueFromContainer(dynamic container)
         {
             if (container is JContainer)
             {
@@ -131,30 +131,30 @@ namespace Centroid
             return container.Value;
         }
 
-        dynamic GetValue(int index)
+        private dynamic GetValue(int index)
         {
             var container = RawConfig[index];
             return GetValueFromContainer(container);
         }
 
-        dynamic GetValue(string key)
+        private dynamic GetValue(string key)
         {
             var container = GetContainer(key);
             return GetValueFromContainer(container);
         }
 
-        dynamic GetContainer(string key)
+        private dynamic GetContainer(string key)
         {
             var actualKey = GetActualKey(key);
             return actualKey == null ? null : RawConfig[actualKey];
         }
 
-        string GetActualKey(string key)
+        private string GetActualKey(string key)
         {
             return GetDynamicMemberNames().SingleOrDefault(m => NormaliseKey(m) == NormaliseKey(key));
         }
 
-        void ValidateUniqueKeys()
+        private void ValidateUniqueKeys()
         {
             var normalizedKeys = GetDynamicMemberNames().Select(p => new { Key = p, NormalizedKey = NormaliseKey(p) });
             var duplicates = normalizedKeys.GroupBy(nk => nk.NormalizedKey).Where(g => g.Count() > 1).ToArray();
@@ -165,7 +165,7 @@ namespace Centroid
             throw new InvalidOperationException("Centroid.Config instance contains duplicate keys: " + string.Join(", ", keys));
         }
 
-        static void MergeInto(JContainer left, JToken right)
+        private static void MergeInto(JContainer left, JToken right)
         {
             foreach (var rightChild in right.Children<JProperty>())
             {
