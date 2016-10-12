@@ -1,5 +1,6 @@
 import unittest
 import json
+import os.path
 from centroid import Config
 
 class ConfigTest(unittest.TestCase):
@@ -14,7 +15,7 @@ class ConfigTest(unittest.TestCase):
 
     @property
     def _shared_file_path(self):
-        return 'config.json'
+        return os.path.normpath('../config.json')
 
     def test_create_from_string(self):
         config = Config(self._json_config)

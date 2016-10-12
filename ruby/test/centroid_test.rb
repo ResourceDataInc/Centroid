@@ -12,7 +12,7 @@ class ConfigTests < Test::Unit::TestCase
   end
 
   def shared_file_path
-    'config.json'
+    File.join('..','..','config.json')
   end
 
   def test_create_from_string
