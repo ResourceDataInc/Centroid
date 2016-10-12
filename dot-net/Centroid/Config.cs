@@ -29,13 +29,13 @@ namespace Centroid
 
         public dynamic RawConfig { get; set; }
 
-        public object this[int index]
+        public dynamic this[int index]
         {
             get { return GetValue(index); }
             set { RawConfig[index] = value; }
         }
 
-        public object this[string index]
+        public dynamic this[string index]
         {
             get { return GetValue(index); }
             set { RawConfig[index] = value; }
