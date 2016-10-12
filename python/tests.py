@@ -1,5 +1,6 @@
 import unittest
 import json
+import os.path
 from centroid import Config
 
 class ConfigTest(unittest.TestCase):
@@ -14,7 +15,7 @@ class ConfigTest(unittest.TestCase):
 
     @property
     def _shared_file_path(self):
-        return 'config.json'
+        return os.path.normpath('../config.json')
 
     def test_create_from_string(self):
         config = Config(self._json_config)
@@ -132,3 +133,10 @@ class ConfigTest(unittest.TestCase):
         config = Config(self._json_config)
         self.assertTrue("the_environment" in config)
         self.assertTrue("does_not_exist" not in config)
+
+    def test_key_as_index(self):
+        config = Config(self._json_config)
+        my_string = "thekey"
+        self.assertEqual(config.the_environment[my_string], "TheValue")
+
+unittest.main()

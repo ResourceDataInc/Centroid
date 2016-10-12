@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -30,6 +30,12 @@ namespace Centroid
         public dynamic RawConfig { get; set; }
 
         public object this[int index]
+        {
+            get { return GetValue(index); }
+            set { RawConfig[index] = value; }
+        }
+
+        public object this[string index]
         {
             get { return GetValue(index); }
             set { RawConfig[index] = value; }
