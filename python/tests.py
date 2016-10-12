@@ -132,3 +132,9 @@ class ConfigTest(unittest.TestCase):
         config = Config(self._json_config)
         self.assertTrue("the_environment" in config)
         self.assertTrue("does_not_exist" not in config)
+
+    def test_key_as_index(self):
+        config = Config(self._json_config)
+        my_string = "thekey"
+        self.assertEqual(config.the_environment[my_string], "TheValue")
+

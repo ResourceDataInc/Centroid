@@ -164,6 +164,12 @@ class ConfigTests < Test::Unit::TestCase
     assert(!config.has_key?("does_not_exist"))
   end
 
+  def test_key_as_index
+    config = Centroid::Config.new(json_config)
+    my_string = "thekey"
+    assert_equal(config.the_environment[my_string], "TheValue")
+  end
+
   def test_respond_to
     config = Centroid::Config.new(json_config)
     assert(config.respond_to?(:the_environment))
