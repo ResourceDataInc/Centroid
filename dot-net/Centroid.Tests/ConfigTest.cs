@@ -258,5 +258,45 @@ namespace Centroid.Tests
             var myString = "thekey";
             Assert.That(config.theEnvironment[myString], Is.EqualTo("TheValue"));
         }
+
+        [Test]
+        public void test_key_as_index2()
+        {
+            const string json = @"
+            {
+              ""Prod"": {
+                ""task"": {
+                  ""task1"": {
+                    ""param1"": ""val11"",
+                    ""param2"": ""val12"",
+                    ""param3"": ""val13""
+                  },
+                  ""task2"": {
+                    ""param1"": ""val21"",
+                    ""param2"": ""val22""
+                  },
+                  ""task3"": {
+                    ""param1"": ""val31"",
+                    ""param2"": ""val32"",
+                    ""param3"": ""val33"",
+                    ""param4"": ""val34""
+                  }
+                }
+              },
+              ""All"": {
+                ""CI"": {
+                  ""Server"": ""centroid-ci01.centroid.local"",
+                  ""Repo"": ""https://github.com/ResourceDataInc/Centroid""
+                }
+              }
+            }";
+
+            dynamic config = new Config(json).ForEnvironment("Prod"); ;
+            for (var ii = 1; ii <= 3; ii++)
+            {
+                var index = "task" + ii;
+                Assert.That(config.task[index].param1, Is.EqualTo("val" + ii + "1"));
+            }
+        }
     }
 }
