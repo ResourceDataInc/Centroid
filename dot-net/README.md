@@ -46,11 +46,14 @@ If you specify an environment in `ForEnvironment`, Centroid will merge the reque
 
 With the following example, Centroid will merge the configuration for *prod* with the configuration for *all*; the result is then available from a new instance of `Config`.
 
+Using this also adds an entry in the config called `environment` in case that's needed in your code--unless your config json already has a property called `environment` (or `Environment`, or `EnViRoNmEnT`; you get the idea).
+
 ```cs
 // ForEnvironment.cs
 var config = Config.FromFile("config.json").ForEnvironment("Prod");
+var environment = config.environment; // => "Prod"
 var server = config.Database.Server; // => "sql-prod.local"
-var solutionPath = config.Solutions.Main; // => "path/to/Main.sln";
+var solutionPath = config.Solutions.Main; // => "path/to/Main.sln"
 ```
 
 ### ContainsKey Instance Method
