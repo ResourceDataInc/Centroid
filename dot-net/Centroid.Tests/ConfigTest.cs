@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.CSharp.RuntimeBinder;
@@ -168,9 +168,9 @@ namespace Centroid.Tests
                     }
                 }";
             dynamic config = new Config(json);
-            foreach (var kvp in config.Connections) 
+            foreach (var kvp in config.Connections)
             {
-                Assert.That(kvp.Value.Password, Is.EqualTo("secret")); 
+                Assert.That(kvp.Value.Password, Is.EqualTo("secret"));
             }
         }
 
@@ -187,7 +187,7 @@ namespace Centroid.Tests
         }
 
         [Test]
-        public void supports_deep_merge()
+        public void test_supports_deep_merge()
         {
             const string json = @"
                 {
@@ -209,11 +209,54 @@ namespace Centroid.Tests
         }
 
         [Test]
+        public void test_supports_merge_override()
+        {
+            const string json = @"
+                {
+                    ""Dev"": {
+                        ""Connection"": {
+                            ""server"": ""dev-server"",
+                            ""database"": ""dev_database"",
+                            ""SdeConnectionFile"": ""DEV:sde(file)""
+                        }
+                    },
+                    ""All"": {
+                        ""Connection"": {
+                            ""server"": """",
+                            ""database"": """",
+                            ""instance"": """",
+                            ""user"": ""default-user"",
+                            ""password"": ""default-password"",
+                            ""version"": """",
+                            ""SdeConnectionFile"": """"
+                        }
+                    }
+                }";
+
+            dynamic config = new Config(json).ForEnvironment("Dev");
+            Assert.That(config.Connection.Server, Is.EqualTo("dev-server"));
+            Assert.That(config.Connection.database, Is.EqualTo("dev_database"));
+            Assert.That(config.Connection.instance, Is.EqualTo(""));
+            Assert.That(config.Connection.user, Is.EqualTo("default-user"));
+            Assert.That(config.Connection.password, Is.EqualTo("default-password"));
+            Assert.That(config.Connection.version, Is.EqualTo(""));
+            Assert.That(config.Connection.SdeConnectionFile, Is.EqualTo("DEV:sde(file)"));
+        }
+
+        [Test]
         public void test_contains_key()
         {
             dynamic config = new Config(JsonConfig);
             Assert.That(config.ContainsKey("theEnvironment"), Is.True);
             Assert.That(config.ContainsKey("DoesNotExist"), Is.False);
+        }
+
+        [Test]
+        public void test_key_as_index()
+        {
+            dynamic config = new Config(JsonConfig);
+            var myString = "thekey";
+            Assert.That(config.theEnvironment[myString], Is.EqualTo("TheValue"));
         }
     }
 }

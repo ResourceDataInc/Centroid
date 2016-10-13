@@ -95,35 +95,6 @@ class ConfigTests < Test::Unit::TestCase
     assert_equal(config.shared, "production!")
   end
 
-  def test_all_environment_is_not_case_sensitive
-    config = Centroid::Config.new('{"Prod": {"Shared": "production!"}, "All": {"Shared": "none", "AllOnly": "works"}}')
-    config = config.for_environment("Prod")
-    assert_equal(config.all_only, "works")
-
-    config = Centroid::Config.new('{"Prod": {"Shared": "production!"}, "all": {"Shared": "none", "AllOnly": "works"}}')
-    config = config.for_environment("Prod")
-    assert_equal(config.all_only, "works")
-  end
-
-  def test_supports_deep_merge
-    config = Centroid::Config.new('{"Prod": {"Database": {"Server": "prod-sql"}}, "All": {"Database": {"MigrationsPath": "path/to/migrations"}}}')
-    config = config.for_environment("Prod")
-    assert_equal(config.database.server, "prod-sql")
-    assert_equal(config.database.migrations_path, "path/to/migrations")
-  end
-
-  def test_has_key
-    config = Centroid::Config.new(json_config)
-    assert(config.has_key?("the_environment"))
-    assert(!config.has_key?("does_not_exist"))
-  end
-
-  def test_respond_to
-    config = Centroid::Config.new(json_config)
-    assert(config.respond_to?(:the_environment))
-    assert(!config.respond_to?(:does_not_exist))
-  end
-
   def test_indexing_json_array
     config = Centroid::Config.new(json_config_with_array)
     assert_equal(config.the_array[0].the_key, "Value1")
@@ -169,4 +140,74 @@ class ConfigTests < Test::Unit::TestCase
         assert_equal(v.password, "secret")
       end
   end
+
+  def test_all_environment_is_not_case_sensitive
+    config = Centroid::Config.new('{"Prod": {"Shared": "production!"}, "All": {"Shared": "none", "AllOnly": "works"}}')
+    config = config.for_environment("Prod")
+    assert_equal(config.all_only, "works")
+
+    config = Centroid::Config.new('{"Prod": {"Shared": "production!"}, "all": {"Shared": "none", "AllOnly": "works"}}')
+    config = config.for_environment("Prod")
+    assert_equal(config.all_only, "works")
+  end
+
+  def test_supports_deep_merge
+    config = Centroid::Config.new('{"Prod": {"Database": {"Server": "prod-sql"}}, "All": {"Database": {"MigrationsPath": "path/to/migrations"}}}')
+    config = config.for_environment("Prod")
+    assert_equal(config.database.server, "prod-sql")
+    assert_equal(config.database.migrations_path, "path/to/migrations")
+  end
+
+  def test_supports_merge_override()
+    json = '
+    {
+      "Dev": {
+        "Connection": {
+          "server": "dev-server",
+          "database": "dev_database",
+          "SdeConnectionFile": "DEV:sde(file)"
+        }
+      },
+      "All": {
+        "Connection": {
+          "server": "",
+          "database": "",
+          "instance": "",
+          "user": "default-user",
+          "password": "default-password",
+          "version": "",
+          "SdeConnectionFile": ""
+        }
+      }
+    }'
+
+    config = Centroid::Config.new(json)
+    config = config.for_environment("Dev");
+    assert_equal(config.Connection.Server, "dev-server");
+    assert_equal(config.Connection.database, "dev_database");
+    assert_equal(config.Connection.instance, "");
+    assert_equal(config.Connection.user, "default-user");
+    assert_equal(config.Connection.password, "default-password");
+    assert_equal(config.Connection.version, "");
+    assert_equal(config.Connection.SdeConnectionFile, "DEV:sde(file)");
+  end
+
+  def test_has_key
+    config = Centroid::Config.new(json_config)
+    assert(config.has_key?("the_environment"))
+    assert(!config.has_key?("does_not_exist"))
+  end
+
+  def test_key_as_index
+    config = Centroid::Config.new(json_config)
+    my_string = "thekey"
+    assert_equal(config.the_environment[my_string], "TheValue")
+  end
+
+  def test_respond_to
+    config = Centroid::Config.new(json_config)
+    assert(config.respond_to?(:the_environment))
+    assert(!config.respond_to?(:does_not_exist))
+  end
+
 end
