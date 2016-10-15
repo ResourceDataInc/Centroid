@@ -53,15 +53,18 @@ class Config:
 
     def for_environment(self, env):
         env_json = self.raw_config[env]
-        env_json["environment"] = env
 
         actual_key = _get_actual_key('all', self.raw_config)
         if actual_key is None:
-            return Config(env_json)
+            config = Config(env_json)
+        else:
+            all_json = _get_value(actual_key, self.raw_config)
+            config = Config(_dict_merge(all_json, env_json))
 
-        all_json = _get_value(actual_key, self.raw_config)
+        if not config.__contains__('environment'):
+            config.raw_config['environment'] = env
 
-        return Config(_dict_merge(all_json, env_json))
+        return config
 
     def __contains__(self, key):
         return _get_actual_key(key, self.raw_config) is not None

@@ -75,6 +75,16 @@ class ConfigTest(unittest.TestCase):
         config = config.for_environment("Prod")
         self.assertEqual(config.shared, "production!")
 
+    def test_environment_specific_config_has_environment_property(self):
+        config = Config('{"Prod": {"Shared": "production!"}, "All": {"Shared": "none"}}')
+        config = config.for_environment("Prod")
+        self.assertEqual(config.environment, "Prod")
+
+    def test_environment_specific_config_no_environment_property_if_has_environment_config_json(self):
+        config = Config('{"Prod": {"Environment": "production!"}, "All": {"Shared": "none"}}')
+        config = config.for_environment("Prod")
+        self.assertEqual(config.environment, "production!")
+
     def test_indexing_json_array(self):
         config = Config(self._json_config_with_array)
         self.assertEqual(config.the_array[0].the_key, "Value1")
