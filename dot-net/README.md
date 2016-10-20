@@ -44,9 +44,9 @@ In the `Config` instance, you can use the `ForEnvironment` instance method to re
 
 If you specify an environment in `ForEnvironment`, Centroid will merge the requested environment's configuration values with the values in *all*. Refer to [Examples in the Centroid document] (../README.md#examples) for information on creating an environment-based JSON configuration file. 
 
-With the following example, Centroid will merge the configuration for *prod* with the configuration for *all*; the result is then available from a new instance of `Config`.
+To maintain environment awareness, this call adds an `environment` configuration value, unless your JSON contains an `environment` (case-insensitive) property already.
 
-Using this also adds an entry in the config called `environment` in case that's needed in your code--unless your config json already has a property called `environment` (or `Environment`, or `EnViRoNmEnT`; you get the idea).
+With the following example, Centroid will merge the configuration for *prod* with the configuration for *all*; the result is then available from a new instance of `Config`.
 
 ```cs
 // ForEnvironment.cs
