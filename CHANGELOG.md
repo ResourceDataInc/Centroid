@@ -1,3 +1,11 @@
+# 1.2.1 - 2016/10/25
+
+## All
+
+### Fixes
+
+* Improves `for_environment` feature to ensure your configuration values aren't replaced.
+
 # 1.2.0 - 2016/10/12
 
 ## CSharp
