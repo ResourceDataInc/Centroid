@@ -44,13 +44,16 @@ In the `Config` instance, you can use the `ForEnvironment` instance method to re
 
 If you specify an environment in `ForEnvironment`, Centroid will merge the requested environment's configuration values with the values in *all*. Refer to [Examples in the Centroid document] (../README.md#examples) for information on creating an environment-based JSON configuration file. 
 
+To maintain environment awareness, this call adds an `environment` configuration value, unless your JSON contains an `environment` (case-insensitive) property already.
+
 With the following example, Centroid will merge the configuration for *prod* with the configuration for *all*; the result is then available from a new instance of `Config`.
 
 ```cs
 // ForEnvironment.cs
 var config = Config.FromFile("config.json").ForEnvironment("Prod");
+var environment = config.environment; // => "Prod"
 var server = config.Database.Server; // => "sql-prod.local"
-var solutionPath = config.Solutions.Main; // => "path/to/Main.sln";
+var solutionPath = config.Solutions.Main; // => "path/to/Main.sln"
 ```
 
 ### ContainsKey Instance Method

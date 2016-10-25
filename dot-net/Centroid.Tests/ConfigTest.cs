@@ -120,6 +120,23 @@ namespace Centroid.Tests
         }
 
         [Test]
+        public void test_environment_specific_config_has_environment_property()
+        {
+            var config = new Config(@"{""Prod"": {""Shared"": ""production!""}, ""All"": {""Shared"": ""none""}}");
+            dynamic environmentConfig = config.ForEnvironment("Prod");
+            Assert.That(environmentConfig.environment, Is.EqualTo("Prod"));
+        }
+
+        [Test]
+        public void test_environment_specific_config_no_environment_property_if_has_environment_config_json()
+        {
+            var config = new Config(@"{""Prod"": {""Environment"": ""production!""}, ""All"": {""Shared"": ""none""}}");
+            dynamic environmentConfig = config.ForEnvironment("Prod");
+            var env = environmentConfig.environment;
+            Assert.That(environmentConfig.environment, Is.EqualTo("production!"));
+        }
+
+        [Test]
         public void test_indexing_json_array()
         {
             dynamic config = new Config(JsonConfigWithArray);

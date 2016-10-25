@@ -95,6 +95,18 @@ class ConfigTests < Test::Unit::TestCase
     assert_equal(config.shared, "production!")
   end
 
+  def test_environment_specific_config_has_environment_property
+    config = Centroid::Config.new('{"Prod": {"Shared": "production!"}, "All": {"Shared": "none"}}')
+    config = config.for_environment("Prod")
+    assert_equal(config.environment, "Prod")
+  end
+
+  def test_environment_specific_config_no_environment_property_if_has_environment_config_json
+    config = Centroid::Config.new('{"Prod": {"Environment": "production!"}, "All": {"Shared": "none"}}')
+    config = config.for_environment("Prod")
+    assert_equal(config.environment, "production!")
+  end
+
   def test_indexing_json_array
     config = Centroid::Config.new(json_config_with_array)
     assert_equal(config.the_array[0].the_key, "Value1")

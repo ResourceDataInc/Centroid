@@ -59,14 +59,19 @@ module Centroid
 
     def for_environment(env)
       env_json = raw_config[env]
-      env_json["environment"] = env
       all_key = actual_key("all")
       if all_key.nil?
-        Config.new(env_json)
+        config = Config.new(env_json)
       else
         all_json = raw_config[all_key]
-        Config.new(deep_merge(all_json, env_json))
+        config = Config.new(deep_merge(all_json, env_json))
       end
+
+      if !config.has_key?('environment')
+        config.raw_config['environment'] = env
+      end
+
+      config
     end
 
     def self.from_file(filename)

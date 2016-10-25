@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -38,7 +38,7 @@ namespace Centroid
         public dynamic this[string index]
         {
             get { return GetValue(index); }
-            set { RawConfig[index] = value; }
+            set { RawConfig[NormaliseKey(index)] = value; }
         }
 
         public bool ContainsKey(string key)
@@ -48,18 +48,26 @@ namespace Centroid
 
         public dynamic ForEnvironment(string environment)
         {
+            Config config;
+
             var envConfig = GetContainer(environment);
-            envConfig["environment"] = environment;
             var allConfig = GetContainer("all");
 
             if (allConfig == null)
             {
-                return new Config(envConfig);
+                config = new Config(envConfig);
+            }
+            else
+            {
+                MergeInto(allConfig, envConfig);
+                config = new Config(allConfig);
             }
 
-            MergeInto(allConfig, envConfig);
-
-            return new Config(allConfig);
+            if (!config.ContainsKey("environment"))
+            {
+                config.RawConfig["environment"] = environment;
+            }
+            return config;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)

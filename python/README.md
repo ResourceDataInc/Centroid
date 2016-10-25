@@ -46,11 +46,14 @@ In the `Config` instance, you can use the `for_environment` instance method to r
 
 If you specify an environment in `for_environment`, Centroid will merge the requested environment's configuration values with the values in *all*. Refer to [Examples in the Centroid document] (../README.md#examples) for information on creating an environment-based JSON configuration file. 
 
+To maintain environment awareness, this call adds an `environment` configuration value, unless your JSON contains an `environment` (case-insensitive) property already.
+
 With the following example, Centroid will merge the configuration for *prod* with the configuration for *all*; the result is then available from a new instance of `Config`.
 
 ```py
 # for_enviroment.py
 config = Config.from_file("config.json").for_environment("prod")
+environment = config.environment # => "prod"
 server = config.some_resource.server # => "resource-prod.local"
 solution_path = config.keys.ssh # => "path/to/id_rsa.pub"
 ```
