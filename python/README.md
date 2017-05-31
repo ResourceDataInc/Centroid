@@ -1,6 +1,6 @@
 # Centroid - Python
 
-This document includes information specific to Python in Centroid. Refer to the [Centroid document] (../README.md) for general information, including information the JSON configuration file. 
+This document includes information specific to Python in Centroid. Refer to the [Centroid document](../README.md) for general information, including information the JSON configuration file. 
 
 ## Installation
 
@@ -17,7 +17,7 @@ In Python, the `centroid.Config` class exposes the following:
 + `for_environment` instance method
 + `__contains__` instance method
 
-> *Note:* The examples given in the following sections are based on the JSON configuration file examples in the [Centroid doucment] (../README.md#examples). 
+> *Note:* The examples given in the following sections are based on the JSON configuration file examples in the [Centroid doucment](../README.md#examples). 
 
 ### from_file Method
 
@@ -44,7 +44,7 @@ server = config.database.server_address # => "my-server.local"
 
 In the `Config` instance, you can use the `for_environment` instance method to retrieve the configuration values for an environment. 
 
-If you specify an environment in `for_environment`, Centroid will merge the requested environment's configuration values with the values in *all*. Refer to [Examples in the Centroid document] (../README.md#examples) for information on creating an environment-based JSON configuration file. 
+If you specify an environment in `for_environment`, Centroid will merge the requested environment's configuration values with the values in *all*. Refer to [Examples in the Centroid document](../README.md#examples) for information on creating an environment-based JSON configuration file. 
 
 To maintain environment awareness, this call adds an `environment` configuration value, unless your JSON contains an `environment` (case-insensitive) property already.
 

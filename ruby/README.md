@@ -1,6 +1,6 @@
 # Centroid - Ruby
 
-This document includes information specific to Ruby in Centroid. Refer to the [Centroid document] (../README.md) for general information, including information the JSON configuration file. 
+This document includes information specific to Ruby in Centroid. Refer to the [Centroid document](../README.md) for general information, including information the JSON configuration file. 
 
 ## Installation
 
@@ -15,7 +15,7 @@ In Ruby, the `Centroid::Config` class exposes the following:
 + `for_environment` instance method
 + `has_key?` instance method
 
-> *Note:* The examples given in the following sections are based on the JSON configuration file examples in the [Centroid document] (../README.md#examples). 
+> *Note:* The examples given in the following sections are based on the JSON configuration file examples in the [Centroid document](../README.md#examples). 
 
 ### from_file Class Method
 
@@ -42,7 +42,7 @@ server = config.database.server_address # => "my-server.local"
 
 In the `Config` instance, you can use the `for_environment` instance method to retrieve the configuration values for an environment. 
 
-If you specify an environment in `for_environment`, Centroid will merge the requested environment's configuration values with the values in *all*. Refer to [Examples in the Centroid document] (../README.md#examples) for information on creating an environment-based JSON configuration file. 
+If you specify an environment in `for_environment`, Centroid will merge the requested environment's configuration values with the values in *all*. Refer to [Examples in the Centroid document](../README.md#examples) for information on creating an environment-based JSON configuration file. 
 
 To maintain environment awareness, this call adds an `environment` configuration value, unless your JSON contains an `environment` (case-insensitive) property already.
 
