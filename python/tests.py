@@ -1,6 +1,6 @@
 import unittest
 import json
-from centroid import Config
+from .centroid import Config
 
 class ConfigTest(unittest.TestCase):
 

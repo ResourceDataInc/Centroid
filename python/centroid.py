@@ -21,7 +21,7 @@ class Config:
 
     def __iter__(self):
         if type(self.raw_config) is dict:
-            for key, value in self.raw_config.iteritems():
+            for key, value in self.raw_config.items():
                 if type(value) is dict:
                     yield key, Config(value)
                 else:
@@ -40,11 +40,11 @@ class Config:
 
     def _validate_unique_keys(self):
         normalized_keys = defaultdict(list)
-        for key, _ in self.raw_config.iteritems():
+        for key, _ in self.raw_config.items():
             normalized_keys[_get_normalised_key(key)].append(key)
 
         dups = list()
-        for _, value in normalized_keys.iteritems():
+        for _, value in normalized_keys.items():
             if len(value) > 1:
                 dups.extend(value)
 
@@ -89,7 +89,7 @@ def _get_value(key, hashtable):
     return hashtable[actual_key]
 
 def _get_actual_key(key, hashtable):
-    result = [ k for k in hashtable.keys() if _get_normalised_key(key) == _get_normalised_key(k) ]
+    result = [ k for k in list(hashtable.keys()) if _get_normalised_key(key) == _get_normalised_key(k) ]
     if len(result) > 0:
         return result[0]
     return None
@@ -97,7 +97,7 @@ def _get_actual_key(key, hashtable):
 def _dict_merge(left, right):
     if not isinstance(right, dict):
         return right
-    for k, v in right.iteritems():
+    for k, v in right.items():
         if k in left and isinstance(left[k], dict):
             left[k] = _dict_merge(left[k], v)
         else:
